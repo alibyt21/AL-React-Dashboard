@@ -2,7 +2,7 @@ import React from "react";
 import SidebarMain from "./SidebarMain/SidebarMain";
 import SidebarSub from "./SidebarSub/SidebarSub";
 import { defaultHeaderHeight } from "src/settings/config";
-
+import menuArray from "src/settings/menu";
 export default function Sidebar() {
   return (
     <div
