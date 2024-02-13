@@ -5,7 +5,7 @@ export default function Footer() {
             <div>
                 {/* <!-- Github svg --> */}
                 <span className="text-xs">
-                    designed by ali bayat
+                    designed by aLBy
                 </span>
             </div>
         </footer>

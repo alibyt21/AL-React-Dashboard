@@ -1,4 +1,5 @@
 import AvatarButton from "./AvatarButton";
+import DarkModeSwap from "./DarkModeSwap";
 import NotificationButton from "./NotificationButton";
 import OptionsButton from "./OptionsButton";
 import SearchButton from "./SearchButton";
@@ -9,6 +10,7 @@ export default function NavbarRight() {
     <div className="relative flex items-center gap-3">
       <SearchButton />
       <div className="items-center hidden gap-3 md:flex">
+        <DarkModeSwap />
         <NotificationButton />
         <ServicesButton />
         <OptionsButton />
