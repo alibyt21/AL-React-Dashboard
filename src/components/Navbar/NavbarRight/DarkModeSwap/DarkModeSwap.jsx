@@ -1,8 +1,34 @@
+import { useEffect, useState } from "react"
+
 export default function DarkModeSwap() {
+    const [darkMode, setDarkMode] = useState(false);
+    useEffect(() => {
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (
+            localStorage.getItem("mode") === "dark" ||
+            (!("theme" in localStorage) &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches &&
+                darkMode)
+        ) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("mode", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("mode", "light");
+        }
+    }, [darkMode])
+
     return (
         <label className="swap swap-rotate mx-3">
             {/* this hidden checkbox controls the state */}
-            <input type="checkbox" />
+            <input
+                type="checkbox"
+                // checked={darkMode}
+                onClick={() => {
+                    console.log(darkMode);
+                    setDarkMode(prevCheck => !prevCheck)
+                }}
+            />
             {/* moon icon */}
             <svg
                 className="swap-on fill-current w-6 h-6"

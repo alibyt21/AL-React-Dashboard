@@ -7,7 +7,7 @@ export default function SidebarMain() {
   return (
     <aside
       className={
-        "flex flex-col transition-all overflow-hidden dark:text-white dark:bg-blue-300 max-h-screen"
+        "flex flex-col transition-all overflow-hidden dark:text-white bg-blue-300 dark:bg-blue-800 max-h-screen"
       }
       style={
         sidebarState != 0
