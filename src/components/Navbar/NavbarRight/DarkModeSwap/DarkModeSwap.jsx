@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react"
 
 export default function DarkModeSwap() {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(null);
+
+    useEffect(() => {
+        if (localStorage.getItem("mode")) {
+            localStorage.getItem("mode") == "dark" ? setDarkMode(true) : setDarkMode(false)
+        } else {
+            window.matchMedia("(prefers-color-scheme: dark)").matches ? setDarkMode(true) : setDarkMode(false)
+        }
+    }, [])
+
     useEffect(() => {
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-        if (
-            localStorage.getItem("mode") === "dark" ||
-            (!("theme" in localStorage) &&
-                window.matchMedia("(prefers-color-scheme: dark)").matches &&
-                darkMode)
-        ) {
+        if (darkMode === true) {
             document.documentElement.classList.add("dark");
             localStorage.setItem("mode", "dark");
-        } else {
+        } else if (darkMode === false) {
             document.documentElement.classList.remove("dark");
             localStorage.setItem("mode", "light");
         }
@@ -23,9 +27,8 @@ export default function DarkModeSwap() {
             {/* this hidden checkbox controls the state */}
             <input
                 type="checkbox"
-                // checked={darkMode}
-                onClick={() => {
-                    console.log(darkMode);
+                checked={darkMode ? true : false}
+                onChange={() => {
                     setDarkMode(prevCheck => !prevCheck)
                 }}
             />
