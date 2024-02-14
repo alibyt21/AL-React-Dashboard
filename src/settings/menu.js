@@ -49,7 +49,7 @@ const menuArray = [
   {
     id: "sayeh",
     icon: "simple-icon-briefcase",
-    label: "menu.sayeh",
+    label: "سایه",
     to: `${adminRoot}/sayeh`,
     permission: "VIEW_SAYEH_DASHBOARD",
     CustomSub: true,
@@ -122,7 +122,7 @@ const menuArray = [
   {
     id: "rozan",
     icon: "simple-icon-settings",
-    label: "menu.profile",
+    label: "روزن",
     to: `${adminRoot}/rozan`,
     CustomSub: true,
     permission: "VIEW_ROZAN_DASHBOARD",
