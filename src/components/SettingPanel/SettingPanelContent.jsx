@@ -1,16 +1,20 @@
-const style = {
-    backdropFilter: "blur(14px)",
-    WebkitBackdropFilter: "blur(14px)",
-};
+import { defaultDirection } from "src/settings/config"
 
-export default function SettingPanelContent() {
+export default function SettingPanelContent({ state, handleState }) {
     return (
         <div
-            className="fixed inset-y-0 left-0 flex flex-col bg-white shadow-lg bg-opacity-20 w-80"
-            style={style}
+            className={`${defaultDirection == "rtl" ? "left-0" : "right-0"} transition-all ease-in-out duration-500 fixed inset-y-0 flex flex-col bg-white shadow-lg bg-opacity-20 w-80`}
+            style={{
+                backdropFilter: "blur(14px)",
+                WebkitBackdropFilter: "blur(14px)",
+                transform: `translateX(${state == true ? "0" : defaultDirection == "rtl" ? "-400" : "400"}px)`
+            }}
         >
             <div className="flex items-center justify-between flex-shrink-0 p-2">
-                <button className="p-2 rounded-md focus:outline-none focus:ring">
+                <button
+                    className="p-2 rounded-md focus:outline-none focus:ring"
+                    onClick={() => { handleState(false) }}
+                >
                     <svg
                         className="w-6 h-6 text-gray-600"
                         xmlns="http://www.w3.org/2000/svg"

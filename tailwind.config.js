@@ -9,5 +9,5 @@ module.exports = {
         },
     },
     darkMode: 'class',
-    plugins: [],
+    plugins: [require("daisyui")],
 };

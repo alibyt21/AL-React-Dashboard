@@ -6,8 +6,8 @@ export default function SettingPanel() {
   const [active, setActive] = useState(false);
   return (
     <>
-      <SettingPanelButton />
-      {active ? <SettingPanelContent /> : null}
+      <SettingPanelButton handleState={setActive} />
+      <SettingPanelContent state={active} handleState={setActive} />
     </>
   );
 }
