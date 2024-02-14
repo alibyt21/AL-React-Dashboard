@@ -9,7 +9,7 @@ export default function Loading() {
             className="fixed inset-0 z-50 flex items-center justify-center text-white bg-black bg-opacity-50"
             style={style}
         >
-            در حال بارگذاری
+            در حال بارگذاری...
         </div>
     )
 }
