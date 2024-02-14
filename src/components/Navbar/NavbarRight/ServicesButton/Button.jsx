@@ -1,8 +1,8 @@
-export default function Button({handleClick}) {
+export default function Button({ toggle }) {
     return (
-        <button 
-        className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring"
-        onClick={handleClick}
+        <button
+            className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring"
+            onClick={toggle}
         >
             <svg
                 className="w-6 h-6 text-gray-500"
