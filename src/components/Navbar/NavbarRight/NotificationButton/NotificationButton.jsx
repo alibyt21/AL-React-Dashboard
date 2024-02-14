@@ -6,7 +6,7 @@ import RedDot from "./RedDot";
 export default function NotificationButton() {
     const [active, setActive] = useState(false);
     return (
-        <div className="relative mx-3">
+        <div className="relative">
             <RedDot />
             <Button />
             {active ? <DropdownCard /> : null}

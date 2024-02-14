@@ -4,7 +4,7 @@ import DropdownCard from "./DropdownCard";
 import GreenDot from "./GreenDot";
 
 export default function AvatarButton() {
-    const [active, setActive] = useState(false);
+    const [active, setActive] = useState(true);
     return (
         <div className="relative">
             <Button />
