@@ -11,9 +11,6 @@ export default function SidebarMain({
 
   const { sidebarState } = useContext(sidebarContext);
 
-  function isItemSelected(itemId) {
-    return selectedMainItem && selectedMainItem.id === itemId;
-  }
   
   return (
     <aside
@@ -30,12 +27,9 @@ export default function SidebarMain({
         <div
           key={index}
           onClick={() => handleItemsClick(item)}
-          className={`flex items-center p-2 ${
-            isItemSelected(item.id) ? " rounded-md hover:bg-gray-100" : ""
-          }`}
+          className={"flex items-center p-2 rounded-md hover:bg-gray-100"}
         >
           {item.label}
-          {console.log("clicked")}
         </div>
       ))}
     </aside>

@@ -17,13 +17,13 @@ export default function SidebarSub({ mainItem, handleItemsClick }) {
       }
     >
       {mainItem.subs.map((subItem, index) => (
-        <div
+        <a
           key={index}
           className="flex items-center p-2 rounded-md hover:bg-gray-100"
-          onClick={() => handleItemsClick(subItem)}
+          href="#"
         >
           {subItem.label}
-        </div>
+        </a>
       ))}
       {/* <SidebarHeader /> */}
       <SidebarLinks />
