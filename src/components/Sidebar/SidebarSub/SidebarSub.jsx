@@ -12,7 +12,7 @@ export default function SidebarSub({ items }) {
     if (item.newWindow) {
       console.log("newWindow");
     } else {
-     console.log("page");
+      console.log("page");
     }
   };
 
@@ -28,17 +28,27 @@ export default function SidebarSub({ items }) {
       {items.map((subItem, index) => (
         <div
           key={index}
-          className="flex items-center p-2 rounded-md hover:bg-gray-100"
+          className="items-center p-2 rounded-md hover:bg-gray-100"
           onClick={() => handleItemClick(subItem)}
         >
+         
+
           {subItem.label}
+          {subItem.subs && subItem.subs.length > 0 && (
+            <div className="mt-[3px]">
+              {subItem.subs.map((sub, idx) => (
+                <p key={idx} onClick={() => handleItemClick(sub)} className="mt-3">
+                  {sub.label}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       ))}
+
       {/* <SidebarHeader /> */}
       <SidebarLinks />
       {/* <SidebarFooter /> */}
     </aside>
   );
 }
-
-
