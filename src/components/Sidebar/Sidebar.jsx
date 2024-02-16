@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import SidebarMain from "./SidebarMain/SidebarMain";
 import SidebarSub from "./SidebarSub/SidebarSub";
 import { defaultHeaderHeight } from "src/settings/config";
@@ -7,13 +7,12 @@ import menuArray from "src/settings/menu";
 export default function Sidebar() {
   const [mainItems, setMainItems] = useState(menuArray);
   const [selectedMainItem, setSelectedMainItem] = useState(null);
- 
 
   const handleItemsClick = (item) => {
     setSelectedMainItem(item);
   };
 
-  
+  const showCustomSub = selectedMainItem && selectedMainItem.CustomSub;
 
   return (
     <div
@@ -25,7 +24,12 @@ export default function Sidebar() {
         selectedMainItem={selectedMainItem}
         handleItemsClick={handleItemsClick}
       />
-      <SidebarSub />
+      {showCustomSub && (
+        <SidebarSub
+          mainItem={selectedMainItem}
+          handleItemsClick={handleItemsClick}
+        />
+      )}
     </div>
   );
 }

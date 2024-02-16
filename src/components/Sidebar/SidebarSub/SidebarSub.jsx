@@ -5,22 +5,29 @@ import SidebarLinks from "./SidebarLinks";
 import sidebarContext from "src/context/sidebarContext";
 import { defaultSidebarSubWidth } from "src/settings/config";
 
-export default function SidebarSub() {
+export default function SidebarSub({ mainItem, handleItemsClick }) {
   const { sidebarState } = useContext(sidebarContext);
   return (
-    <>
-      <aside
-        className={"flex flex-col overflow-hidden max-h-screen transition-all"}
-        style={
-          sidebarState == 2
-            ? { width: `${defaultSidebarSubWidth}px` }
-            : { width: `0px` }
-        }
-      >
-        {/* <SidebarHeader /> */}
-        <SidebarLinks />
-        {/* <SidebarFooter /> */}
-      </aside>
-    </>
+    <aside
+      className="flex flex-col overflow-hidden max-h-screen transition-all"
+      style={
+        sidebarState === 2
+          ? { width: `${defaultSidebarSubWidth}px` }
+          : { width: `0px` }
+      }
+    >
+      {mainItem.subs.map((subItem, index) => (
+        <div
+          key={index}
+          className="flex items-center p-2 rounded-md hover:bg-gray-100"
+          onClick={() => handleItemsClick(subItem)}
+        >
+          {subItem.label}
+        </div>
+      ))}
+      {/* <SidebarHeader /> */}
+      <SidebarLinks />
+      {/* <SidebarFooter /> */}
+    </aside>
   );
 }
