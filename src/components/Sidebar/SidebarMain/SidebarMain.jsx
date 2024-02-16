@@ -7,11 +7,8 @@ export default function SidebarMain({
   selectedMainItem,
   handleItemsClick,
 }) {
- 
-
   const { sidebarState } = useContext(sidebarContext);
 
-  
   return (
     <aside
       className={

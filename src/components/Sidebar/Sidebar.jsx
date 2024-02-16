@@ -24,11 +24,7 @@ export default function Sidebar() {
         selectedMainItem={selectedMainItem}
         handleItemsClick={handleItemsClick}
       />
-      {showCustomSub && (
-        <SidebarSub
-          items={selectedMainItem.subs}
-        />
-      )}
+      {showCustomSub && <SidebarSub items={selectedMainItem.subs} />}
     </div>
   );
 }

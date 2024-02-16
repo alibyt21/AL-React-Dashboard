@@ -26,23 +26,25 @@ export default function SidebarSub({ items }) {
       }
     >
       {items.map((subItem, index) => (
-        <div
-          key={index}
-          className="items-center p-2 rounded-md hover:bg-gray-100"
-          onClick={() => handleItemClick(subItem)}
-        >
-         
-
-          {subItem.label}
-          {subItem.subs && subItem.subs.length > 0 && (
-            <div className="mt-[3px]">
-              {subItem.subs.map((sub, idx) => (
-                <p key={idx} onClick={() => handleItemClick(sub)} className="mt-3">
-                  {sub.label}
-                </p>
-              ))}
-            </div>
-          )}
+        <div key={index} onClick={() => handleItemClick(subItem)}>
+          <div className="items-center p-2 rounded-md hover:bg-gray-100">
+            {subItem.label}
+          </div>
+          <div>
+            {subItem.subs && subItem.subs.length > 0 && (
+              <div className="mt-[3px]">
+                {subItem.subs.map((sub, idx) => (
+                  <p
+                    className="items-center p-2 rounded-md hover:bg-gray-100 "
+                    key={idx}
+                    onClick={() => handleItemClick(sub)}
+                  >
+                    {sub.label}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       ))}
 
