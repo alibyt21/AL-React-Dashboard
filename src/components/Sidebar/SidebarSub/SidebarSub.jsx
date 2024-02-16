@@ -5,8 +5,17 @@ import SidebarLinks from "./SidebarLinks";
 import sidebarContext from "src/context/sidebarContext";
 import { defaultSidebarSubWidth } from "src/settings/config";
 
-export default function SidebarSub({ mainItem, handleItemsClick }) {
+export default function SidebarSub({ items }) {
   const { sidebarState } = useContext(sidebarContext);
+
+  const handleItemClick = (item) => {
+    if (item.newWindow) {
+      console.log("newWindow");
+    } else {
+     console.log("page");
+    }
+  };
+
   return (
     <aside
       className="flex flex-col overflow-hidden max-h-screen transition-all"
@@ -16,14 +25,14 @@ export default function SidebarSub({ mainItem, handleItemsClick }) {
           : { width: `0px` }
       }
     >
-      {mainItem.subs.map((subItem, index) => (
-        <a
+      {items.map((subItem, index) => (
+        <div
           key={index}
           className="flex items-center p-2 rounded-md hover:bg-gray-100"
-          href="#"
+          onClick={() => handleItemClick(subItem)}
         >
           {subItem.label}
-        </a>
+        </div>
       ))}
       {/* <SidebarHeader /> */}
       <SidebarLinks />
@@ -31,3 +40,5 @@ export default function SidebarSub({ mainItem, handleItemsClick }) {
     </aside>
   );
 }
+
+
