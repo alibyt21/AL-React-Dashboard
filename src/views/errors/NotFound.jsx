@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function NotFound() {
   return (
-    <div className="w-full h-screen flex justify-center items-center bg-gray-100 dark:bg-black">
+    <div className="w-full h-screen flex justify-center items-center bg-gray-100">
       <div className="flex gap-5 items-center">
         <div className="font-bold text-9xl text-red-500">404</div>
         <div className="flex flex-col gap-2">

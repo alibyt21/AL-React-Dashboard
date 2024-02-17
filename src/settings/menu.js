@@ -1,116 +1,111 @@
 import { adminRoot } from "./config";
+import { HiOutlineClipboardList } from "react-icons/hi";
 
 const menuArray = [
   {
-    id: "profile",
-    icon: "simple-icon-user",
+    icon: <HiOutlineClipboardList />,
     label: "داشبورد",
     to: `${adminRoot}/profile`,
-    CustomSub: true,
     subs: [
       {
-        icon: "simple-icon-home",
-        label: "profile.account",
+        icon: <HiOutlineClipboardList />,
+        label: "حساب کاربری",
         to: `${adminRoot}/profile/account`,
         permission: "VIEW_PROFILE",
       },
       {
-        icon: "simple-icon-user",
-        label: "profile.viewProfile",
+        icon: <HiOutlineClipboardList />,
+        label: "پروفایل",
         to: `${adminRoot}/profile/details`,
         permission: "VIEW_PROFILE",
       },
       {
-        icon: "simple-icon-note",
-        label: "profile.edit",
+        icon: <HiOutlineClipboardList />,
+        label: "ویرایش پروفایل",
         to: `${adminRoot}/profile/edit`,
         permission: "UPDATE_PROFILE",
       },
       {
-        icon: "iconsminds-finger-print",
-        label: "profile.security",
+        icon: <HiOutlineClipboardList />,
+        label: "امنیت حساب",
         to: `${adminRoot}/profile/security`,
         permission: "CHANGE_PASSWORD",
       },
       {
-        icon: "simple-icon-eye",
-        label: "profile.logs",
+        icon: <HiOutlineClipboardList />,
+        label: "لاگ های حساب",
         to: `${adminRoot}/profile/user-log`,
         permission: "LOGS",
       },
       {
-        icon: "simple-icon-share-alt",
-        label: "profile.sso_gov",
+        icon: <HiOutlineClipboardList />,
+        label: "sso دولت",
         to: "https://my.gov.ir/",
         newWindow: true,
       },
     ],
   },
   {
-    id: "sayeh",
-    icon: "simple-icon-briefcase",
+    icon: <HiOutlineClipboardList />,
     label: "سایه",
     to: `${adminRoot}/sayeh`,
     permission: "VIEW_SAYEH_DASHBOARD",
-    CustomSub: true,
     subs: [
       {
-        icon: "simple-icon-people",
-        label: "sayeh.dashboard",
+        icon: <HiOutlineClipboardList />,
+        label: "داشبورد",
         to: `${adminRoot}/sayeh/dashboard`,
         permission: "VIEW_SAYEH_DASHBOARD",
       },
       {
-        id: "pages-authorization",
-        label: "menu.organizing",
+        label: "سازمان ها",
         to: `${adminRoot}/sayeh`,
         subs: [
           {
-            icon: "simple-icon-user",
-            label: "sayeh.identities",
+            icon: <HiOutlineClipboardList />,
+            label: "موجودیت ها",
             to: `${adminRoot}/sayeh/identities`,
             permission: "VIEW_ACCOUNT",
           },
           {
-            icon: "simple-icon-briefcase",
-            label: "sayeh.groups",
+            icon: <HiOutlineClipboardList />,
+            label: "گروه ها",
             to: `${adminRoot}/sayeh/groups`,
             permission: "VIEW_GROUP",
           },
           {
-            icon: "simple-icon-lock",
-            label: "sayeh.roles",
+            icon: <HiOutlineClipboardList />,
+            label: "نقش های کاربری",
             to: `${adminRoot}/sayeh/roles`,
             permission: "VIEW_ROLE",
           },
         ],
       },
       {
-        id: "pages-authorization",
-        label: "menu.systems",
+        label: "سیستم های تعریف شده",
         to: `${adminRoot}/sayeh`,
         subs: [
           {
-            icon: "simple-icon-organization",
-            label: "sayeh.protected-resources",
+            icon: <HiOutlineClipboardList />,
+            label: "منابع محافظت شده",
             to: `${adminRoot}/sayeh/protected-resources`,
             permission: "VIEW_PROTECTED_RESOURCE",
           },
           {
-            icon: "simple-icon-shield",
-            label: "sayeh.access-policies",
+            icon: <HiOutlineClipboardList />,
+            label: "کنترل دسترسی",
             to: `${adminRoot}/sayeh/access-policies`,
             permission: "VIEW_ACCESS_POLICY",
           },
         ],
       },
       {
-        id: "pages-authorization",
         label: "menu.casLogs",
+        icon: <HiOutlineClipboardList />,
         to: `${adminRoot}/sayeh`,
         subs: [
           {
-            icon: "simple-icon-user-following",
+            icon: <HiOutlineClipboardList />,
             label: "sayeh.login-logs",
             to: `${adminRoot}/sayeh/auth-logs`,
             permission: "VIEW_ADMIN_AUDIT_LOG",
@@ -120,77 +115,10 @@ const menuArray = [
     ],
   },
   {
-    id: "rozan",
-    icon: "simple-icon-settings",
-    label: "روزن",
+    icon: <HiOutlineClipboardList />,
+    label: "تست",
     to: `${adminRoot}/rozan`,
-    CustomSub: true,
     permission: "VIEW_ROZAN_DASHBOARD",
-    subs: [
-      {
-        icon: "simple-icon-settings",
-        label: "sayeh.dashboard",
-        to: `${adminRoot}/rozan/dashboard`,
-        permission: "VIEW_ROZAN_DASHBOARD",
-      },
-      {
-        id: "pages-authorization",
-        label: "rozan.serviceOperation",
-        to: `${adminRoot}/rozan`,
-        subs: [
-          {
-            icon: "simple-icon-organization",
-            label: "menu.services",
-            to: `${adminRoot}/rozan/services`,
-            permission: "VIEW_BUSINESS_SERVICE",
-          },
-          {
-            icon: "simple-icon-layers",
-            label: "sayeh.protected-resources-category",
-            to: `${adminRoot}/rozan/protected-resource-categories`,
-            permission: "VIEW_SUBCATALOG",
-          },
-        ],
-      },
-      {
-        id: "pages-authorization",
-        label: "menu.connections",
-        to: `${adminRoot}/rozan`,
-        subs: [
-          {
-            icon: "simple-icon-bell",
-            label: "sayeh.announcements",
-            to: `${adminRoot}/rozan/announcements`,
-            permission: "VIEW_ANNOUNCEMENT",
-          },
-          // {
-          //   icon: "iconsminds-column",
-          //   label: "sayeh.regulation",
-          //   to: `${adminRoot}/rozan/regulations`,
-          //   permission: "VIEW_REGULATIONS",
-          // },
-        ],
-      },
-      {
-        id: "pages-authorization",
-        label: "menu.control",
-        to: `${adminRoot}/rozan`,
-        subs: [
-          {
-            icon: "simple-icon-eye",
-            label: "sayeh.action-logs",
-            to: `${adminRoot}/rozan/action-logs`,
-            permission: "VIEW_ADMIN_ACTION_LOG",
-          },
-          {
-            icon: "simple-icon-key",
-            label: "sayeh.signin-logs",
-            to: `${adminRoot}/rozan/signin-logs`,
-            permission: "VIEW_ADMIN_PORTAL_AUDIT_LOG",
-          },
-        ],
-      },
-    ],
   },
 ];
 export default menuArray;

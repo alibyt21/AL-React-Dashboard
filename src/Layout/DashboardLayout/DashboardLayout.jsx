@@ -58,7 +58,7 @@ export default function Dashboard({ children }) {
 
   return (
     <sidebarContext.Provider value={{ sidebarState, handleSidebar }}>
-      <div className="flex h-screen overflow-y-hidden bg-white">
+      <div className="flex h-screen overflow-y-hidden bg-white text-gray-700 dark:text-white">
         {/* <Loading /> */}
         <SidebarBackdrop state={sidebarState} />
         <Sidebar />

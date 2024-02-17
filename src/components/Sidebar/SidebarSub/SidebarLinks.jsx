@@ -1,11 +1,11 @@
 import SubItem from "./SubItem";
 
-export default function SidebarLinks() {
+export default function SidebarLinks({ items }) {
   return (
-    <nav className="flex-1 overflow-hidden hover:overflow-y-auto">
-      <ul className="p-2 overflow-hidden">
-        <SubItem />
-      </ul>
+    <nav className="flex flex-col gap-1 p-2 flex-1 overflow-hidden hover:overflow-y-auto">
+      {items.map((item, index) => (
+        <SubItem item={item} key={index} />
+      ))}
     </nav>
   );
 }
