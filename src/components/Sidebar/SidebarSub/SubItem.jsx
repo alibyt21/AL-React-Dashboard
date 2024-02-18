@@ -10,7 +10,7 @@ export default function SubItem({ item }) {
           !item.subs &&
           (
             <Link to={item.to}>
-              <div className="flex gap-1 w-full cursor-pointer select-none items-center p-2 rounded-md hover:bg-gray-100">
+              <div className="flex gap-1 w-full cursor-pointer select-none items-center p-2 rounded-md hover:bg-gray-100 text-sm">
                 <span>
                   {item.icon}
                 </span>

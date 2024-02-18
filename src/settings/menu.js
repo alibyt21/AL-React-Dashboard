@@ -1,124 +1,147 @@
 import { adminRoot } from "./config";
-import { HiOutlineClipboardList } from "react-icons/hi";
+import { HiOutlineClipboardList, HiOutlineNewspaper } from "react-icons/hi";
+import { HiOutlineCalendarDays } from "react-icons/hi2";
+import { LuImport, LuDownload } from "react-icons/lu";
+import { VscSettings } from "react-icons/vsc";
+import { BsDatabase } from "react-icons/bs";
+import { TbMapSearch } from "react-icons/tb";
+import { RiHistoryLine } from "react-icons/ri";
+import { BiWrench } from "react-icons/bi";
+import { GoTasklist } from "react-icons/go";
+import { PiCubeDuotone } from "react-icons/pi";
+import { PiTreeStructureDuotone } from "react-icons/pi";
+import { CgDatabase } from "react-icons/cg";
+import { PiMapTrifoldDuotone } from "react-icons/pi";
+import { AiTwotoneSetting } from "react-icons/ai";
+
 
 const menuArray = [
   {
-    icon: <HiOutlineClipboardList />,
-    label: "داشبورد",
-    to: `${adminRoot}/profile`,
+    icon: <BsDatabase size={30} />,
+    label: "داده‌های کسب و کار",
+    to: `${adminRoot}/#`,
     subs: [
       {
         icon: <HiOutlineClipboardList />,
-        label: "حساب کاربری",
+        label: "افراد",
         to: `${adminRoot}/profile/account`,
         permission: "VIEW_PROFILE",
       },
       {
         icon: <HiOutlineClipboardList />,
-        label: "پروفایل",
+        label: "واحدهای سازمانی",
         to: `${adminRoot}/profile/details`,
         permission: "VIEW_PROFILE",
       },
       {
-        icon: <HiOutlineClipboardList />,
-        label: "ویرایش پروفایل",
-        to: `${adminRoot}/profile/edit`,
-        permission: "UPDATE_PROFILE",
-      },
-      {
-        icon: <HiOutlineClipboardList />,
-        label: "امنیت حساب",
-        to: `${adminRoot}/profile/security`,
-        permission: "CHANGE_PASSWORD",
-      },
-      {
-        icon: <HiOutlineClipboardList />,
-        label: "لاگ های حساب",
-        to: `${adminRoot}/profile/user-log`,
+        icon: <TbMapSearch />,
+        label: "جستجوی پیشرفته",
+        to: `${adminRoot}/advanced-search`,
         permission: "LOGS",
       },
       {
-        icon: <HiOutlineClipboardList />,
-        label: "sso دولت",
+        icon: <RiHistoryLine />,
+        label: "سوابق جستجو",
         to: "https://my.gov.ir/",
         newWindow: true,
       },
     ],
   },
   {
-    icon: <HiOutlineClipboardList />,
-    label: "سایه",
+    icon: <LuImport size={30} />,
+    label: "بارگذاری داده",
     to: `${adminRoot}/sayeh`,
     permission: "VIEW_SAYEH_DASHBOARD",
     subs: [
       {
-        icon: <HiOutlineClipboardList />,
-        label: "داشبورد",
+        icon: <LuDownload />,
+        label: "بارگذاری داده",
         to: `${adminRoot}/sayeh/dashboard`,
         permission: "VIEW_SAYEH_DASHBOARD",
       },
       {
-        label: "سازمان ها",
+        icon: <LuDownload />,
+        label: "بارگذاری تک رکورد",
         to: `${adminRoot}/sayeh`,
-        subs: [
-          {
-            icon: <HiOutlineClipboardList />,
-            label: "موجودیت ها",
-            to: `${adminRoot}/sayeh/identities`,
-            permission: "VIEW_ACCOUNT",
-          },
-          {
-            icon: <HiOutlineClipboardList />,
-            label: "گروه ها",
-            to: `${adminRoot}/sayeh/groups`,
-            permission: "VIEW_GROUP",
-          },
-          {
-            icon: <HiOutlineClipboardList />,
-            label: "نقش های کاربری",
-            to: `${adminRoot}/sayeh/roles`,
-            permission: "VIEW_ROLE",
-          },
-        ],
       },
       {
-        label: "سیستم های تعریف شده",
+        label: "قوانین بارگذاری",
+        icon: <BiWrench />,
         to: `${adminRoot}/sayeh`,
-        subs: [
-          {
-            icon: <HiOutlineClipboardList />,
-            label: "منابع محافظت شده",
-            to: `${adminRoot}/sayeh/protected-resources`,
-            permission: "VIEW_PROTECTED_RESOURCE",
-          },
-          {
-            icon: <HiOutlineClipboardList />,
-            label: "کنترل دسترسی",
-            to: `${adminRoot}/sayeh/access-policies`,
-            permission: "VIEW_ACCESS_POLICY",
-          },
-        ],
+
       },
       {
-        label: "menu.casLogs",
-        icon: <HiOutlineClipboardList />,
+        label: "برنامه‌های بارگذاری",
+        icon: <GoTasklist />,
         to: `${adminRoot}/sayeh`,
-        subs: [
-          {
-            icon: <HiOutlineClipboardList />,
-            label: "sayeh.login-logs",
-            to: `${adminRoot}/sayeh/auth-logs`,
-            permission: "VIEW_ADMIN_AUDIT_LOG",
-          },
-        ],
+      },
+      {
+        label: "بارگذاری‌های زمانبندی شده",
+        icon: <HiOutlineCalendarDays />,
+        to: `${adminRoot}/sayeh`,
+      }
+    ],
+  },
+  {
+    icon: <HiOutlineNewspaper size={30} />,
+    label: "کاتالوگ داده",
+    to: `${adminRoot}/rozan`,
+    permission: "VIEW_ROZAN_DASHBOARD",
+    subs: [
+      {
+        icon: <PiCubeDuotone />,
+        label: "موجودیت",
+        to: `${adminRoot}/sayeh/dashboard`,
+        permission: "VIEW_SAYEH_DASHBOARD",
+      },
+      {
+        icon: <PiTreeStructureDuotone />,
+        label: "ساختارداده",
+        to: `${adminRoot}/sayeh`,
+      },
+      {
+        label: "داده‌های پایه کسب و کار",
+        icon: <CgDatabase />,
+        to: `${adminRoot}/sayeh`,
+
+      },
+      {
+        label: "کاتالوگ داده‌های پایه کسب و کار",
+        icon: <PiMapTrifoldDuotone />,
+        to: `${adminRoot}/sayeh`,
       },
     ],
   },
   {
-    icon: <HiOutlineClipboardList />,
-    label: "تست",
+    icon: <VscSettings size={30} />,
+    label: "تنظیمات و فراداده‌ها",
     to: `${adminRoot}/rozan`,
     permission: "VIEW_ROZAN_DASHBOARD",
+    subs: [
+      {
+        icon: <AiTwotoneSetting />,
+        label: "تنظیمات محیطی",
+        to: `${adminRoot}/sayeh/dashboard`,
+        permission: "VIEW_SAYEH_DASHBOARD",
+
+      },
+      {
+        icon: <AiTwotoneSetting />,
+        label: "انواع داده پایه سیستمی",
+        to: `${adminRoot}/sayeh`,
+      },
+      {
+        icon: <AiTwotoneSetting />,
+        label: "انواع تنظیمات",
+        to: `${adminRoot}/sayeh`,
+
+      },
+      {
+        icon: <AiTwotoneSetting />,
+        label: "جدول تنظیمات ادمین",
+        to: `${adminRoot}/sayeh`,
+      },
+    ],
   },
 ];
 export default menuArray;

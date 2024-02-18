@@ -19,7 +19,7 @@ export default function SidebarSub({ items }) {
     >
       <SidebarHeader />
       <SidebarLinks items={items} />
-      <SidebarFooter />
+      {/* <SidebarFooter /> */}
     </aside>
   );
 }

@@ -18,7 +18,7 @@ export default function Accordion({ title, children, isOpen, icon }) {
         >
             <div
                 onClick={handleToggle}
-                className="flex justify-between items-center p-2 hover:bg-gray-100 rounded-md"
+                className="flex justify-between items-center p-2 hover:bg-gray-100 rounded-md text-sm"
             >
                 <div className="flex items-center gap-1">
                     {icon}

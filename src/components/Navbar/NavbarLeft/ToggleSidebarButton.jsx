@@ -13,7 +13,7 @@ export default function ToggleSidebarButton() {
       <svg
         className="main"
         style={{ width: "10px" }}
-        fill={`${sidebarState != 0 ? "#79fcff" : "#000000"}`}
+        fill={`${sidebarState != 0 ? "#000066" : "#cecece"}`}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 9 17"
       >
@@ -23,7 +23,7 @@ export default function ToggleSidebarButton() {
       </svg>
       <svg
         className="sub"
-        fill={`${sidebarState == 2 ? "#79fcff" : "#000000"}`}
+        fill={`${sidebarState == 2 ? "#000066" : "#cecece"}`}
         style={{ width: "20px" }}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 18 17"

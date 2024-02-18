@@ -2,25 +2,25 @@ import React, { useContext } from "react";
 import sidebarContext from "src/context/sidebarContext";
 import { defaultSidebarMainWidth } from "src/settings/config";
 import SidebarMainSingle from "./SidebarMainSingle";
-import menuArray from "src/settings/menu";
+import SidebarHeader from "./SidebarHeader";
+import SidebarFooter from "./SidebarFooter";
+import SidebarLinks from "./SidebarLinks";
 
-export default function SidebarMain({
-  handleItemsClick,
-}) {
+export default function SidebarMain({ handleItemsClick, selected }) {
   const { sidebarState } = useContext(sidebarContext);
 
   return (
     <aside
-      className="flex flex-col transition-all overflow-hidden dark:text-white bg-blue-300 dark:bg-blue-800 max-h-screen py-1"
+      className="flex flex-col transition-all overflow-hidden text-white bg-[#000066] dark:bg-blue-800 max-h-screen py-1"
       style={
         sidebarState !== 0
           ? { width: `${defaultSidebarMainWidth}px` }
           : { width: `0px` }
       }
     >
-      {menuArray.map((item, index) => (
-        <SidebarMainSingle item={item} key={index} handleItemsClick={handleItemsClick} />
-      ))}
+      <SidebarHeader />
+      <SidebarLinks handleItemsClick={handleItemsClick} selected={selected} />
+      <SidebarFooter />
     </aside>
   );
 }
