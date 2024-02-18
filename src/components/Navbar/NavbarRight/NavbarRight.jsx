@@ -7,9 +7,9 @@ import ServicesButton from "./ServicesButton";
 
 export default function NavbarRight() {
   return (
-    <div className="relative flex items-center gap-3">
+    <div className="relative flex items-center gap-2">
       <DarkModeSwap />
-      <div className="items-center hidden gap-3 md:flex">
+      <div className="items-center hidden gap-2 md:flex">
         <SearchButton />
         <NotificationButton />
         <ServicesButton />

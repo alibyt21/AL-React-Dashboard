@@ -1,7 +1,7 @@
 export default function Button({ toggle }) {
     return (
         <button
-            className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring"
+            className="transition-all ease-in-out duration-200 p-[6px] rounded-xl border-2 border-solid border-gray-100 dark:border-gray-700 hover:bg-gray-100 hover:dark:bg-gray-700 focus:outline-none focus:ring"
             onClick={toggle}
         >
             <svg

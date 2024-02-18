@@ -9,7 +9,7 @@ export default function ServicesButton() {
     return (
         <div>
             <Button toggle={() => setActive(true)} />
-            <Modal isOpen={active} toggle={() => setActive(false)} width={300} top={defaultHeaderHeight} left={110}>
+            <Modal isOpen={active} toggle={() => setActive(false)} width={300} top={defaultHeaderHeight} left={185}>
                 <ModalBody>
                     <div className="p-4 text-lg font-medium border-b">
                         Web apps & services

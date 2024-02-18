@@ -11,7 +11,7 @@ export default function NotificationButton() {
         <div className="relative">
             <RedDot />
             <Button toggle={() => setActive(true)} />
-            <Modal isOpen={active} toggle={() => setActive(false)} width={300} top={defaultHeaderHeight} left={160}>
+            <Modal isOpen={active} toggle={() => setActive(false)} width={300} top={defaultHeaderHeight} left={235}>
                 <ModalBody>
                     <div className="p-4 font-medium border-b">
                         <span className="text-gray-800">
