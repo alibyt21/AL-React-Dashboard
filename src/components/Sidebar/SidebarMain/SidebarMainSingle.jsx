@@ -8,7 +8,7 @@ export default function SidebarMainSingle({ item, handleItemsClick }) {
                 item.subs
                     ?
                     <div
-                        className='flex items-center gap-1 p-2 cursor-pointer select-none rounded-md hover:bg-gray-100'
+                        className='mx-1 flex items-center gap-1 p-2 cursor-pointer select-none rounded-md hover:bg-gray-100'
                         onClick={() => handleItemsClick(item)}
                     >
                         <span>
@@ -21,7 +21,7 @@ export default function SidebarMainSingle({ item, handleItemsClick }) {
                     :
                     <Link
                         to={item.to}
-                        className='flex items-center gap-1 p-2 cursor-pointer select-none rounded-md hover:bg-gray-100'
+                        className='mx-1 flex items-center gap-1 p-2 cursor-pointer select-none rounded-md hover:bg-gray-100'
                     >
                         <span>
                             {item.icon}
