@@ -1,16 +1,27 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Accordion from "src/components/Accordion";
+import sidebarContext from "src/context/sidebarContext";
 
 export default function SubItem({ item }) {
+  const [isCurrentPage, setIsCurrentPage] = useState(false)
+  const location = useLocation();
+  const { selectedMainMenu } = useContext(sidebarContext)
+
+
+  useEffect(() => {
+    setIsCurrentPage(window.location.href == window.origin + item.to)
+  }, [location, selectedMainMenu]);
+
+
   return (
-    <ul className="overflow-hidden">
+    <ul className={` ${isCurrentPage ? "bg-gray-100 dark:bg-gray-700" : ""} rounded-md overflow-hidden`} >
       <li>
         {
           !item.subs &&
           (
             <Link to={item.to}>
-              <div className="flex gap-1 w-full cursor-pointer select-none items-center p-2 rounded-md hover:bg-gray-100 text-sm">
+              <div className="flex gap-1 w-full cursor-pointer select-none items-center p-2 rounded-md hover:bg-gray-100 hover:dark:bg-gray-800 text-sm">
                 <span>
                   {item.icon}
                 </span>

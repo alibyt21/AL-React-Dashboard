@@ -11,6 +11,7 @@ import {
   defaultSidebarState,
   moveBoth,
 } from "src/settings/config";
+import menuArray from "src/settings/menu";
 export default function Dashboard({ children }) {
   // set direction language and theme
   useEffect(() => {
@@ -20,6 +21,7 @@ export default function Dashboard({ children }) {
 
   const [sidebarState, setSidebarState] = useState(defaultSidebarState); // 0 == both is close , 1 == main is open, 2 == both is open;
   const [prevSidebarState, setPrevSidebarState] = useState(sidebarState);
+  const [selectedMainMenu, setSelectedMainMenu] = useState(menuArray[0])
 
   const handleSidebar = (newSidebarState = false) => {
     let newValue;
@@ -57,7 +59,7 @@ export default function Dashboard({ children }) {
   };
 
   return (
-    <sidebarContext.Provider value={{ sidebarState, handleSidebar }}>
+    <sidebarContext.Provider value={{ sidebarState, handleSidebar, selectedMainMenu, setSelectedMainMenu }}>
       <div className="flex h-screen overflow-y-hidden bg-white text-gray-700 dark:text-white">
         {/* <Loading /> */}
         <SidebarBackdrop state={sidebarState} />

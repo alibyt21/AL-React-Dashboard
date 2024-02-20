@@ -5,7 +5,7 @@ import SidebarLinks from "./SidebarLinks";
 import sidebarContext from "src/context/sidebarContext";
 import { defaultSidebarSubWidth } from "src/settings/config";
 
-export default function SidebarSub({ items }) {
+export default function SidebarSub() {
   const { sidebarState } = useContext(sidebarContext);
 
   return (
@@ -18,7 +18,7 @@ export default function SidebarSub({ items }) {
       }
     >
       <SidebarHeader />
-      <SidebarLinks items={items} />
+      <SidebarLinks />
       {/* <SidebarFooter /> */}
     </aside>
   );

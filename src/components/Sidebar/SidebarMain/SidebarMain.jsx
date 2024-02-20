@@ -6,7 +6,7 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarFooter from "./SidebarFooter";
 import SidebarLinks from "./SidebarLinks";
 
-export default function SidebarMain({ handleItemsClick, selected }) {
+export default function SidebarMain() {
   const { sidebarState } = useContext(sidebarContext);
 
   return (
@@ -19,7 +19,7 @@ export default function SidebarMain({ handleItemsClick, selected }) {
       }
     >
       <SidebarHeader />
-      <SidebarLinks handleItemsClick={handleItemsClick} selected={selected} />
+      <SidebarLinks />
       <SidebarFooter />
     </aside>
   );
