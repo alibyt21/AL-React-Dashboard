@@ -7,7 +7,7 @@ import NavbarRight from "./NavbarRight";
 export default function Navbar() {
   return (
     <header
-      className="flex items-center justify-between p-2 border-b"
+      className="flex items-center justify-between p-2"
       style={{ height: `${defaultHeaderHeight}px` }}
     >
       <NavbarLeft />

@@ -6,7 +6,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className="fixed inset-y-0 z-10 flex lg:!mt-0 flex-shrink-0 max-h-screen overflow-hidden transition-all bg-white dark:bg-black border-l border-r shadow-lg lg:z-auto lg:static lg:shadow-none"
+      className="fixed inset-y-0 z-10 flex lg:!mt-0 flex-shrink-0 max-h-screen overflow-hidden transition-all bg-white dark:bg-black shadow-lg lg:z-auto lg:static lg:shadow-none"
       style={{ marginTop: `${defaultHeaderHeight}px` }}
     >
       <SidebarMain />
