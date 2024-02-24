@@ -1,69 +1,70 @@
+:root {
+  --primary-color: #0b2d72;
+  --secondary-color: #ffffff;
+}
+
 @font-face {
   font-family: "IRANSansWebFaNum";
   src: url("../public/assets/fonts/IRANSansWebFaNum.eot");
-  src: url("../public/assets/fonts/IRANSansWebFaNum.eot?#iefix")
-      format("embedded-opentype"),
+  src: url("../public/assets/fonts/IRANSansWebFaNum.eot?#iefix") format("embedded-opentype"),
     url("../public/assets/fonts/IRANSansWebFaNum.woff2") format("woff2"),
     url("../public/assets/fonts/IRANSansWebFaNum.woff") format("woff"),
     url("../public/assets/fonts/IRANSansWebFaNum.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: "IRANSansWebFaNum";
   src: url("../public/assets/fonts/IRANSansWebFaNum_Bold.eot");
-  src: url("../public/assets/fonts/IRANSansWebFaNum_Bold.eot?#iefix")
-      format("embedded-opentype"),
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Bold.eot?#iefix") format("embedded-opentype"),
     url("../public/assets/fonts/IRANSansWebFaNum_Bold.woff2") format("woff2"),
     url("../public/assets/fonts/IRANSansWebFaNum_Bold.woff") format("woff"),
     url("../public/assets/fonts/IRANSansWebFaNum_Bold.ttf") format("truetype");
   font-weight: bold;
   font-style: normal;
 }
+
 @font-face {
   font-family: "IRANSansWebFaNum";
   src: url("../public/assets/fonts/IRANSansWebFaNum_Black.eot");
-  src: url("../public/assets/fonts/IRANSansWebFaNum_Black.eot?#iefix")
-      format("embedded-opentype"),
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Black.eot?#iefix") format("embedded-opentype"),
     url("../public/assets/fonts/IRANSansWebFaNum_Black.woff2") format("woff2"),
     url("../public/assets/fonts/IRANSansWebFaNum_Black.woff") format("woff"),
     url("../public/assets/fonts/IRANSansWebFaNum_Black.ttf") format("truetype");
   font-weight: 900;
   font-style: normal;
 }
+
 @font-face {
   font-family: "IRANSansWebFaNum";
   src: url("../public/assets/fonts/IRANSansWebFaNum_Medium.eot");
-  src: url("../public/assets/fonts/IRANSansWebFaNum_Medium.eot?#iefix")
-      format("embedded-opentype"),
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Medium.eot?#iefix") format("embedded-opentype"),
     url("../public/assets/fonts/IRANSansWebFaNum_Medium.woff2") format("woff2"),
     url("../public/assets/fonts/IRANSansWebFaNum_Medium.woff") format("woff"),
     url("../public/assets/fonts/IRANSansWebFaNum_Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
 }
+
 @font-face {
   font-family: "IRANSansWebFaNum";
   src: url("../public/assets/fonts/IRANSansWebFaNum_Light.eot");
-  src: url("../public/assets/fonts/IRANSansWebFaNum_Light.eot?#iefix")
-      format("embedded-opentype"),
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Light.eot?#iefix") format("embedded-opentype"),
     url("../public/assets/fonts/IRANSansWebFaNum_Light.woff2") format("woff2"),
     url("../public/assets/fonts/IRANSansWebFaNum_Light.woff") format("woff"),
     url("../public/assets/fonts/IRANSansWebFaNum_Light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
 }
+
 @font-face {
   font-family: "IRANSansWebFaNum";
   src: url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.eot");
-  src: url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.eot?#iefix")
-      format("embedded-opentype"),
-    url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.woff2")
-      format("woff2"),
-    url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.woff")
-      format("woff"),
-    url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.ttf")
-      format("truetype");
+  src: url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.eot?#iefix") format("embedded-opentype"),
+    url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.woff2") format("woff2"),
+    url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.woff") format("woff"),
+    url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.ttf") format("truetype");
   font-weight: 100;
   font-style: normal;
 }
@@ -112,4 +113,17 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #aaaaaa;
 }
+
 /* END custom scroll bar */
+
+.login-container {
+  background-image: url("/public/assets/img/backgrounds/bg2.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+text tspan:first-child {
+  font-size: 16px;
+  font-weight: 700;
+}
