@@ -3,10 +3,9 @@ import DashboardLayout from "src/Layout/DashboardLayout";
 
 export default function Application() {
   return (
-    <>
-      <DashboardLayout>
-        <Outlet />
-      </DashboardLayout>
-    </>
-  );
+    <DashboardLayout>
+      <Outlet />
+    </DashboardLayout>
+  )
+
 }
