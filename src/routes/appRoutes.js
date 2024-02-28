@@ -1,13 +1,15 @@
-import Application from "src/views/app/Application";
+import ProtectedView from "src/views/ProtectedView";
+import NotFound from "src/views/errors/NotFound";
 
 export const appRoutes = [
   {
-    path: "/app",
-    element: <Application />,
+    path: "/app/",
+    element: <ProtectedView />,
+    errorElement: <NotFound />,
     children: [
       {
-        path: "contacts/:contactId",
-        element: <div>Hello world!</div>,
+        path: "",
+        element: <p>salam</p>,
       },
     ],
   },

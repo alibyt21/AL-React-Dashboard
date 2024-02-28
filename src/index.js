@@ -5,15 +5,19 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { IconContext } from "react-icons";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 
   <IconContext.Provider value={{ size: "24" }}>
-    <React.StrictMode>
+    {/* <React.StrictMode> */}
       <App />
-    </React.StrictMode>
+      <ToastContainer position="bottom-left"/>
+    {/* </React.StrictMode> */}
   </IconContext.Provider>
 );
 

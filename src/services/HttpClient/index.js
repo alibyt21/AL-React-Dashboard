@@ -1,1 +1,1 @@
-export { get , post } from './HttpClient';
+export { get , post } from './HttpClient.js';
