@@ -3,8 +3,8 @@ import Column from "./Column";
 import { FaEllipsisH } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa";
 
-export default function TableEntities() {
-  function more(params) {
+export default function NewTableEntities() {
+  function more() {
     console.log("more Items");
   }
   return (
