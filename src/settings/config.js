@@ -7,7 +7,7 @@ export const homeURL =
 export const adminRoot = "/app";
 
 // direction
-export const defaultDirection = "ltr"; // rtl or ltr
+export const defaultDirection = "rtl"; // rtl or ltr
 
 // language
 export const defaultLanguage = "fa";
