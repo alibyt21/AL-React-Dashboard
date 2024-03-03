@@ -1,4 +1,4 @@
-import InternalMainContent from "src/components/InformationSystem/InternalMainContent";
+import InternalMainContent from "../global/components/InformationSystem/InternalMainContent";
 
 export default function Home() {
   return (
