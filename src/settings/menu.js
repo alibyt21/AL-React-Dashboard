@@ -91,7 +91,7 @@ const menuArray = [
       {
         icon: <PiCubeDuotone />,
         label: "موجودیت",
-        to: `${adminRoot}/sayeh/dashboard`,
+        to: `${adminRoot}/entity`,
         permission: "VIEW_SAYEH_DASHBOARD",
       },
       {
