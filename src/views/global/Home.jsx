@@ -3,7 +3,7 @@ import InternalMainContent from "../global/components/InformationSystem/Internal
 export default function Home() {
   return (
     <>
-      Hello World!
+      Hello World!!!
       <InternalMainContent />
     </>
   );
