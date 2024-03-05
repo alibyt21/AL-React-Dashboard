@@ -1,8 +1,8 @@
 import { useState } from "react";
-import BusinessData from "../Management/SiteManagement/BusinessData";
-import DataloadingOperations from "../Management/SiteManagement/DataloadingOperations";
-import DataCatalog from "../Management/SiteManagement/DataCatalog";
-import MetadataSettings from "../Management/SiteManagement/MetadataSettings";
+import BusinessData from "./BusinessData";
+import DataloadingOperations from "./DataloadingOperations";
+import DataCatalog from "./DataCatalog";
+import MetadataSettings from "./MetadataSettings";
 export default function WebsiteManagement() {
   const [activeTab, setActiveTab] = useState("businessData");
 

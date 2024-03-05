@@ -2,7 +2,7 @@ import BusinessInformation from "./BusinessInformation";
 export default function DataCatalog() {
   return (
     <>
-      <div className="grid gap-5 grid-cols-3 ">
+      <div className="flex-col-reverse xl:grid gap-5 grid-cols-3">
         <BusinessInformation informationCompany={"افراد"} />
         <BusinessInformation informationCompany={" اطلاعات تماس"} />
         <BusinessInformation informationCompany={"پرسنل واحد فناوری اطلاعات"} />

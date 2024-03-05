@@ -17,19 +17,17 @@ const data = {
         "#7faade",
         "#548ed3",
       ],
-      animateRotate: false
+      animateRotate: false,
     },
   ],
 };
-
-
 
 function EntitysChart() {
   return (
     <div>
       <h2>تعداد کل موجودیت ها</h2>
       <div className="w-[30%] h-[30%] ">
-        <Doughnut data={data}/>
+        <Doughnut data={data} />
       </div>
     </div>
   );
