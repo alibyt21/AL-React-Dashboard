@@ -3,6 +3,7 @@ import BusinessData from "./BusinessData";
 import DataloadingOperations from "./DataloadingOperations";
 import DataCatalog from "./DataCatalog";
 import MetadataSettings from "./MetadataSettings";
+import EntitysChart from "../EntityChart/EntitysChart";
 export default function WebsiteManagement() {
   const [activeTab, setActiveTab] = useState("businessData");
 
@@ -46,12 +47,19 @@ export default function WebsiteManagement() {
           تنظیمات فراداده ها
         </div>
       </div>
-      <div className=" bg-white w-fit p-6 rounded-2xl border border-solid border-gray-200">
-        <div className="mt-[20px]"></div>
-        {activeTab === "businessData" && <BusinessData />}
-        {activeTab === "dataLoading" && <DataloadingOperations />}
-        {activeTab === "dataCatalog" && <DataCatalog />}
-        {activeTab === "metadataSettings" && <MetadataSettings />}
+
+      <div className="flex flex-col xl:flex-row">
+        <div className=" bg-white w-fit p-6 rounded-2xl border border-solid border-gray-200">
+          <div className="mt-[20px]"></div>
+          {activeTab === "businessData" && <BusinessData />}
+          {activeTab === "dataLoading" && <DataloadingOperations />}
+          {activeTab === "dataCatalog" && <DataCatalog />}
+          {activeTab === "metadataSettings" && <MetadataSettings />}
+        </div>
+        <div className="mr-[30px]"></div>
+        <div className="w-fit bg-white rounded-xl border border-solid border-gray-200 p-5  mt-5 xl:mt-0">
+          <EntitysChart />
+        </div>
       </div>
     </>
   );

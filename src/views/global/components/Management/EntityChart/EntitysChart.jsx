@@ -1,13 +1,23 @@
 import React from "react";
-import { Chart as Chartjs, ArcElement, Tooltip, Legend } from "chart.js";
+import { Chart, ArcElement, Tooltip, Legend, Title } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-Chartjs.register(ArcElement, Tooltip, Legend);
+
+Chart.register(ArcElement, Tooltip, Legend, Title);
+Chart.defaults.plugins.tooltip.backgroundColor = "rgb(191, 191, 190)";
+Chart.defaults.plugins.legend.position = "bottom";
+Chart.defaults.plugins.legend.title.display = true;
 
 const data = {
-  labels: ["Red", "Blue", "Yellow"],
+  labels: [
+    "گزارش آمار یک",
+    "گزارش آمار یک",
+    "گزارش آمار یک",
+    "گزارش آمار یک",
+    "گزارش آمار یک",
+    "گزارش آمار یک",
+  ],
   datasets: [
     {
-      label: "",
       data: [60, 10, 15, 20, 30, 40],
       backgroundColor: [
         "#2972c8",
@@ -17,7 +27,8 @@ const data = {
         "#7faade",
         "#548ed3",
       ],
-      animateRotate: false,
+      borderWidth: 2,
+      radius: "80%",
     },
   ],
 };
@@ -25,10 +36,10 @@ const data = {
 function EntitysChart() {
   return (
     <div>
-      <h2>تعداد کل موجودیت ها</h2>
-      <div className="w-[30%] h-[30%] ">
-        <Doughnut data={data} />
-      </div>
+      <h2 className="font-semibold  mt-3 ">تعداد کل موجودیت ها</h2>
+      <p className="text-gray-600  mt-3 "> سامانه های اطلاعاتیA  </p>
+
+      <Doughnut data={data} />
     </div>
   );
 }

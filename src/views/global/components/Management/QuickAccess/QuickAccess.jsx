@@ -4,6 +4,7 @@ export default function QuickAccess() {
   return (
     <>
       <div>
+        <h1 className="font-semibold  mt-3 mb-3"> دسترسی سریع</h1>
         <div className="flex gap-5 flex-col-reverse xl:flex-row">
           <CreateNewEntity createNewEntity="ساخت موجودیت جدید " />
           <ListOfDataStructures
