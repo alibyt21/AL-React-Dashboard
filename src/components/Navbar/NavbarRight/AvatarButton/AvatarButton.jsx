@@ -12,7 +12,6 @@ export default function AvatarButton() {
     return (
         <div className="relative">
             <Button isActive={active} toggle={() => setActive(true)} />
-            <GreenDot />
             <Modal isOpen={active} toggle={() => setActive(false)} top={defaultHeaderHeight} left={10} width={300}>
                 {/* <ModalHeader toggle={() => setActive(false)} >
                     salam
