@@ -18,7 +18,7 @@ export default function Dashboard({ children }) {
     // theme setting may be go there
   }, []);
 
-  const [sidebarState, setSidebarState] = useState(defaultSidebarState); // 0 == both is close , 1 == main is open, 2 == both is open;
+  const [sidebarState, setSidebarState] = useState(window.innerWidth < 1024 ? 0 : defaultSidebarState); // 0 == both is close , 1 == main is open, 2 == both is open;
   const [prevSidebarState, setPrevSidebarState] = useState(sidebarState);
   const [selectedMainMenu, setSelectedMainMenu] = useState(menuArray[0]);
 
