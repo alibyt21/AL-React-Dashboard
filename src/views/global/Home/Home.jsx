@@ -1,7 +1,9 @@
+import Table from "src/components/Table";
+
 export default function Home() {
   return (
     <>
-      Hello World!
+      <Table />
     </>
   );
 }
