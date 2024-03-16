@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { PiX } from "react-icons/pi";
 
 export default function ModalBottom({ children, title, isActive, handleIsActive, hasClose }) {
     // ref
@@ -31,9 +32,10 @@ export default function ModalBottom({ children, title, isActive, handleIsActive,
                                 ?
                                 <div
                                     onClick={() => handleIsActive()}
-                                    className="cursor-pointer hover:bg-gray-100 -mx-3 rounded-xl p-2 px-4 transition-all ease-in-out duration-300"
+                                    className="cursor-pointer hover:bg-gray-100 -mx-3 rounded-xl p-2 transition-all ease-in-out duration-300"
                                 >
-                                    X
+                                    <PiX />
+
                                 </div>
                                 :
                                 null

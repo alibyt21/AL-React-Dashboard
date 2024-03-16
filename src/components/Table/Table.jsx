@@ -1,5 +1,4 @@
 import { PiTextColumns } from "react-icons/pi";
-import { LuFilter } from "react-icons/lu";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { LuArrowDownAZ } from "react-icons/lu";
 import { LuArrowDownZA } from "react-icons/lu";
@@ -26,6 +25,8 @@ import {
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import Offcanvas from "src/components/Offcanvas";
 import BottomSheet from "../BottomSheet";
+// import AdvancedSearch from "./AdvancedSearch";
+import Spinner from "../Spinner";
 
 const columnHelper = createColumnHelper()
 
@@ -33,13 +34,10 @@ const columnHelper = createColumnHelper()
 export default function Table({ data, columns }) {
     const [advancedSearchActive, setAdvancedSearchActive] = useState(false);
     const [columnHidingIsActive, setColumnHidingIsActive] = useState(false);
-    const [columnFilters, setColumnFilters] = useState([])
     const [globalFilter, setGlobalFilter] = useState('')
     const [padding, setPadding] = useState(4);
     const [isFiltersActive, setIsFiltersActive] = useState(false)
 
-    // init datas
-    const [tableData, setData] = useState(() => [...data])
     // init columns
     let tableColumns = []
     if (!columns) {
@@ -79,7 +77,7 @@ export default function Table({ data, columns }) {
     const rerender = useReducer(() => ({}), {})[1]
 
     const table = useReactTable({
-        data: tableData,
+        data: data,
         columns: tableColumns,
         filterFns: {
             fuzzy: fuzzyFilter,
@@ -112,49 +110,44 @@ export default function Table({ data, columns }) {
             {/* <Offcanvas isActive={advancedSearchActive} setIsActive={setAdvancedSearchActive} title="جستجوی پیشرفته">
             </Offcanvas> */}
 
-            {/* <BottomSheet title="جستجو پیشرفته" hasClose={true} isActive={advancedSearchActive} handleIsActive={setAdvancedSearchActive}>
-                جستجو پیشرفته
+            {/* <BottomSheet title="جستجو و فیلتر پیشرفته" subTitle="با اعمال قوانین، نحوه نمایش را شخصی سازی کنید" hasClose={true} isActive={advancedSearchActive} handleIsActive={setAdvancedSearchActive}>
+                <AdvancedSearch />
             </BottomSheet> */}
             <div className="relative">
-                <div>
-                    {
-
-                        <div className={`${columnHidingIsActive ? "visible opacity-100 translate-y-0" : "invisible opacity-0 translate-y-6"} transition-all ease-in-out duration-200 z-[10] absolute left-[92px] top-[45px] inline-flex flex-col rounded-xl bg-white dark:bg-black shadow-al select-none`}>
-                            <div className="border-b border-gray-200 hover:bg-gray-100 p-2 px-5">
+                <div className={`${columnHidingIsActive ? "visible opacity-100 translate-y-0" : "invisible opacity-0 translate-y-6"} transition-all ease-in-out duration-200 z-[10] absolute lg:left-[255px] left-[105px] top-[50px] inline-flex flex-col rounded-xl bg-white dark:bg-black shadow-al select-none`}>
+                    <div className="border-b border-gray-200 hover:bg-gray-100 p-2 px-5">
+                        <label className="cursor-pointer">
+                            <input
+                                className="cursor-pointer"
+                                {...{
+                                    type: 'checkbox',
+                                    checked: table.getIsAllColumnsVisible(),
+                                    onChange: table.getToggleAllColumnsVisibilityHandler(),
+                                }}
+                            />{' '}
+                            همه
+                        </label>
+                    </div>
+                    {table.getAllLeafColumns().map(column => {
+                        return (
+                            <div key={column.id} className="hover:bg-gray-100 p-2 px-5" >
                                 <label className="cursor-pointer">
                                     <input
                                         className="cursor-pointer"
                                         {...{
                                             type: 'checkbox',
-                                            checked: table.getIsAllColumnsVisible(),
-                                            onChange: table.getToggleAllColumnsVisibilityHandler(),
+                                            checked: column.getIsVisible(),
+                                            onChange: column.getToggleVisibilityHandler(),
                                         }}
                                     />{' '}
-                                    همه
+                                    {typeof (column.columnDef.header) == "function" ? column.id : column.columnDef.header}
                                 </label>
                             </div>
-                            {table.getAllLeafColumns().map(column => {
-                                return (
-                                    <div key={column.id} className="hover:bg-gray-100 p-2 px-5" >
-                                        <label className="cursor-pointer">
-                                            <input
-                                                className="cursor-pointer"
-                                                {...{
-                                                    type: 'checkbox',
-                                                    checked: column.getIsVisible(),
-                                                    onChange: column.getToggleVisibilityHandler(),
-                                                }}
-                                            />{' '}
-                                            {typeof (column.columnDef.header) == "function" ? column.id : column.columnDef.header}
-                                        </label>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    }
+                        )
+                    })}
                 </div>
-                <div className='w-full flex items-center justify-between bg-white dark:bg-black shadow-al rounded-xl my-2 p-2 px-3'>
-                    <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[300px]">
+                <div className='select-none w-full flex items-center justify-between bg-white dark:bg-black shadow-al rounded-xl my-2 p-2 px-3'>
+                    <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[200px] lg:w-[300px]">
                         <HiMagnifyingGlass className="text-gray-300" size={20} />
 
                         <input
@@ -165,30 +158,42 @@ export default function Table({ data, columns }) {
                             onChange={e => setGlobalFilter(e.target.value)}
                         />
                     </div>
-                    <div className="flex gap-1 justify-center items-center">
+                    <div className="flex gap-2 justify-center items-center">
                         <div
                             onClick={() => { handlePadding() }}
-                            className="cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
+                            className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
                         >
                             <PiRows size={20} />
+                            <span className="hidden lg:flex text-sm">
+                                فاصله ردیف‌ها
+                            </span>
                         </div>
                         <div
                             onClick={() => { setColumnHidingIsActive(!columnHidingIsActive) }}
-                            className="cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
+                            className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
                         >
                             <PiTextColumns size={20} />
+                            <span className="hidden lg:flex text-sm">
+                                فیلتر ستون
+                            </span>
                         </div>
                         <div
                             onClick={() => { setIsFiltersActive(!isFiltersActive) }}
-                            className="cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
+                            className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
                         >
                             <PiFunnelSimple size={20} />
+                            <span className="hidden lg:flex text-sm">
+                                فیلتر رکود
+                            </span>
                         </div>
                         <div
-                            className="cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
+                            className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
                             onClick={() => { setAdvancedSearchActive(true) }}
                         >
                             <PiListMagnifyingGlass size={20} />
+                            <span className="hidden lg:flex text-sm">
+                                جستجو پیشرفته
+                            </span>
                         </div>
 
                     </div>
@@ -245,16 +250,21 @@ export default function Table({ data, columns }) {
                                     ))}
                                 </tr>
                             ))}
-                            {table.getRowModel().rows.map(row => (
-                                <tr key={row.id} className='tr last:border-none border-b border-solid border-gray-100 hover:bg-blue-50 dark:hover:bg-gray-800'>
-                                    {row.getVisibleCells().map(cell => (
-                                        <td key={cell.id} className={`td transition-all ease-in-out duration-200 p-${padding}`}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
+                            {
+                                (
+                                    table.getRowModel().rows.map(row => (
+                                        <tr key={row.id} className='tr last:border-none border-b border-solid border-gray-100 hover:bg-blue-50 dark:hover:bg-gray-800'>
+                                            {row.getVisibleCells().map(cell => (
+                                                <td key={cell.id} className={`td transition-all ease-in-out duration-200 p-${padding}`}>
+                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))
+                                )
+                            }
                         </tbody>
+
                         {/* <div className='tfoot'>
                         {table.getFooterGroups().map(footerGroup => (
                             <div className='tr w-full flex' key={footerGroup.id}>
@@ -272,10 +282,24 @@ export default function Table({ data, columns }) {
                         ))}
                     </div> */}
                     </table>
+                    {
+
+                        !data.length
+                            ?
+                            <div className="flex w-full bg-white dark:bg-black">
+                                <Spinner text="در حال بارگیری ..." />
+                            </div>
+                            :
+                            !table.getRowModel().rows.length
+                            &&
+                            <div className="bg-white dark:bg-black flex justify-center p-4 text-sm">
+                                هیچ داده‌ای یافت نشد
+                            </div>
+                    }
                 </div>
             </div>
-            <div className='w-full bg-white dark:bg-black shadow-al rounded-xl flex justify-between p-1  my-2  px-5'>
-                <div className='flex gap-2 items-center justify-center'>
+            <div className='w-full bg-white dark:bg-black shadow-al rounded-xl flex justify-center md:justify-between p-1  my-2  px-5'>
+                <div className='hidden md:flex gap-2 items-center justify-center'>
                     <span className="flex items-center gap-1 text-sm">
                         برو به صفحه:
                         <input
@@ -328,7 +352,7 @@ export default function Table({ data, columns }) {
                     </button>
 
                 </div>
-                <div className="flex gap-2 items-center justify-center">
+                <div className="hidden md:flex gap-2 items-center justify-center">
                     <select
                         className='bg-white dark:bg-black rounded-lg border border-solid border-gray-200'
                         value={table.getState().pagination.pageSize}
@@ -344,11 +368,7 @@ export default function Table({ data, columns }) {
                     </select>
                     <span className='text-sm'>رکورد در صفحه</span>
                 </div>
-
             </div>
-            <button onClick={() => rerender()} className="border p-2">
-                Rerender
-            </button>
         </>
     )
 }

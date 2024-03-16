@@ -1,5 +1,5 @@
 :root {
-  --primary-color: #0b2d72;
+  --primary-color: #50C4ED;
   --secondary-color: #ffffff;
 }
 
@@ -139,13 +139,13 @@ input:focus-visible {
   padding: 6px;
 }
 
+/* START select */
+
 input[type=text],
 input[type=number] {
   background-color: white;
   transition: 0.05s all linear;
 }
-
-
 
 .dark input[type=text],
 .dark input[type=number] {
@@ -160,14 +160,28 @@ input[type=number] {
   background-color: black;
 }
 
-input{
+input {
   outline: none;
 }
 
-tr:nth-child(even){
+select {
+  background-color: white;
+}
+
+.dark select {
+  background-color: black;
+}
+
+/* END select */
+
+/* START table */
+
+tr:nth-child(even) {
   background-color: rgb(252, 252, 252);
 }
 
-.dark tr:nth-child(even){
+.dark tr:nth-child(even) {
   background-color: rgb(42, 42, 42);
 }
+
+/* END table */

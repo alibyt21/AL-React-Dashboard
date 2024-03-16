@@ -1,6 +1,8 @@
+import Spinner from "./Spinner";
+
 const style = {
-    backdropFilter: "blur(14px)",
-    WebkitBackdropFilter: "blur(14px)",
+    backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
 };
 
 export default function Loading() {
@@ -9,7 +11,7 @@ export default function Loading() {
             className="fixed inset-0 z-50 flex items-center justify-center text-white bg-black bg-opacity-50"
             style={style}
         >
-            در حال بارگذاری...
+            <Spinner color="white" text="در حال بارگیری ..." />
         </div>
     )
 }
