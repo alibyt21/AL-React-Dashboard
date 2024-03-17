@@ -150,6 +150,7 @@ input[type=number] {
 .dark input[type=text],
 .dark input[type=number] {
   background-color: black;
+
 }
 
 .al-dashboard {
