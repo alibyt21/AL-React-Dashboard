@@ -1,5 +1,5 @@
 :root {
-  --primary-color: #50C4ED;
+  --primary-color: #18a87c;
   --secondary-color: #ffffff;
 }
 
@@ -118,7 +118,7 @@ code {
 /* END custom scroll bar */
 
 .login-container {
-  background-image: url("/public/assets/img/backgrounds/bg2.jpg");
+  background-image: url("/public/assets/img/backgrounds/bg4.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
