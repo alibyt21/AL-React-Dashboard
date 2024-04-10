@@ -1,0 +1,193 @@
+:root {
+  --primary-color: #755a00;
+  --secondary-color: #ffffff;
+}
+
+
+@font-face {
+  font-family: "IRANSansWebFaNum";
+  src: url("../public/assets/fonts/IRANSansWebFaNum.eot");
+  src: url("../public/assets/fonts/IRANSansWebFaNum.eot?#iefix") format("embedded-opentype"),
+    url("../public/assets/fonts/IRANSansWebFaNum.woff2") format("woff2"),
+    url("../public/assets/fonts/IRANSansWebFaNum.woff") format("woff"),
+    url("../public/assets/fonts/IRANSansWebFaNum.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansWebFaNum";
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Bold.eot");
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Bold.eot?#iefix") format("embedded-opentype"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Bold.woff2") format("woff2"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Bold.woff") format("woff"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansWebFaNum";
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Black.eot");
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Black.eot?#iefix") format("embedded-opentype"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Black.woff2") format("woff2"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Black.woff") format("woff"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansWebFaNum";
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Medium.eot");
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Medium.eot?#iefix") format("embedded-opentype"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Medium.woff2") format("woff2"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Medium.woff") format("woff"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansWebFaNum";
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Light.eot");
+  src: url("../public/assets/fonts/IRANSansWebFaNum_Light.eot?#iefix") format("embedded-opentype"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Light.woff2") format("woff2"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Light.woff") format("woff"),
+    url("../public/assets/fonts/IRANSansWebFaNum_Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANSansWebFaNum";
+  src: url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.eot");
+  src: url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.eot?#iefix") format("embedded-opentype"),
+    url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.woff2") format("woff2"),
+    url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.woff") format("woff"),
+    url("../public/assets/fonts/IRANSansWebFaNum_UltraLight.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.Toastify__toast-body {
+  font-family: 'IRANSansWebFaNum';
+}
+
+html {
+  overflow-y: scroll;
+  scroll-behavior: smooth !important;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* START custom scroll bar */
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  direction: ltr;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #cccccc;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bbbbbb;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #aaaaaa;
+}
+
+/* END custom scroll bar */
+
+.login-container {
+  background-image: url("/public/assets/img/backgrounds/bg4.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+text tspan:first-child {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+input:focus-visible {
+  outline: none;
+}
+
+.al-dashboard>div {
+  background-color: white;
+  border-radius: 10px;
+  padding: 6px;
+}
+
+/* START select */
+
+input[type=text],
+input[type=number] {
+  background-color: white;
+  transition: 0.05s all linear;
+}
+
+.dark input[type=text],
+.dark input[type=number] {
+  background-color: black;
+
+}
+
+.al-dashboard {
+  border-radius: 10px;
+}
+
+.dark .al-dashboard>div {
+  background-color: black;
+}
+
+input {
+  outline: none;
+}
+
+select {
+  background-color: white;
+}
+
+.dark select {
+  background-color: black;
+}
+
+/* END select */
+
+/* START table */
+
+tr:nth-child(even) {
+  background-color: rgb(252, 252, 252);
+}
+
+.dark tr:nth-child(even) {
+  background-color: rgb(42, 42, 42);
+}
+
+/* END table */
