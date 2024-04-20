@@ -7,6 +7,8 @@ import { PiRows } from "react-icons/pi";
 import { PiFunnelSimple } from "react-icons/pi";
 import { PiListMagnifyingGlass } from "react-icons/pi";
 
+
+
 import {
     createColumnHelper,
     flexRender,
@@ -23,16 +25,14 @@ import {
 
 
 import { useEffect, useMemo, useReducer, useState } from 'react'
-import Offcanvas from "src/components/Offcanvas";
-import BottomSheet from "../BottomSheet";
-// import AdvancedSearch from "./AdvancedSearch";
 import Spinner from "../Spinner";
+import AdvancedFilter from "./AdvancedFilter";
 
 const columnHelper = createColumnHelper()
 
 
 export default function Table({ data, columns }) {
-    const [advancedSearchActive, setAdvancedSearchActive] = useState(false);
+    const [advancedFilterActive, setAdvancedFilterActive] = useState(false);
     const [columnHidingIsActive, setColumnHidingIsActive] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('')
     const [padding, setPadding] = useState(4);
@@ -104,15 +104,13 @@ export default function Table({ data, columns }) {
 
 
 
+    
 
     return (
         <>
-            {/* <Offcanvas isActive={advancedSearchActive} setIsActive={setAdvancedSearchActive} title="جستجوی پیشرفته">
-            </Offcanvas> */}
 
-            {/* <BottomSheet title="جستجو و فیلتر پیشرفته" subTitle="با اعمال قوانین، نحوه نمایش را شخصی سازی کنید" hasClose={true} isActive={advancedSearchActive} handleIsActive={setAdvancedSearchActive}>
-                <AdvancedSearch />
-            </BottomSheet> */}
+            <AdvancedFilter active={advancedFilterActive} setActive={setAdvancedFilterActive}/>
+
             <div className="relative">
                 <div className={`${columnHidingIsActive ? "visible opacity-100 translate-y-0" : "invisible opacity-0 translate-y-6"} transition-all ease-in-out duration-200 z-[10] absolute lg:left-[255px] left-[105px] top-[50px] inline-flex flex-col rounded-xl bg-white dark:bg-black shadow-al select-none`}>
                     <div className="border-b border-gray-200 hover:bg-gray-100 p-2 px-5">
@@ -149,10 +147,9 @@ export default function Table({ data, columns }) {
                 <div className='select-none w-full flex items-center justify-between bg-white dark:bg-black shadow-al rounded-xl my-2 p-2 px-3'>
                     <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[200px] lg:w-[300px]">
                         <HiMagnifyingGlass className="text-gray-300" size={20} />
-
                         <input
                             type="text"
-                            placeholder="جستجو..."
+                            placeholder="جستجو ..."
                             className="focus:!border-none focus:!outline-none px-2"
                             value={globalFilter || ''}
                             onChange={e => setGlobalFilter(e.target.value)}
@@ -188,7 +185,7 @@ export default function Table({ data, columns }) {
                         </div>
                         <div
                             className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
-                            onClick={() => { setAdvancedSearchActive(true) }}
+                            onClick={() => { setAdvancedFilterActive(true) }}
                         >
                             <PiListMagnifyingGlass size={20} />
                             <span className="hidden lg:flex text-sm">
@@ -237,7 +234,7 @@ export default function Table({ data, columns }) {
                                                             {{
                                                                 asc: <LuArrowDownAZ size={18} />,
                                                                 desc: <LuArrowDownZA size={18} />,
-                                                            }[header.column.getIsSorted().toString()] || <LuArrowDownUp size={18} className="opacity-20" />}
+                                                            }[header.column.getIsSorted().toString()] || <LuArrowDownUp size={18} className="opacity-15 hover:opacity-40 transition-all ease-in-out duration-300" />}
                                                         </div>
                                                         {header.column.getCanFilter() ? (
                                                             <div className={`${isFiltersActive ? "visible h-[40px] opacity-100" : "invisible h-0 opacity-0"} transition-all ease-in-out duration-300`}>

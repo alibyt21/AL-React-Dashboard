@@ -1,0 +1,44 @@
+.adsea li::before {
+    border-right: 1px solid;
+    content: "";
+    position: absolute;
+    right: -50px;
+    width: 50px;
+    border-bottom: 1px solid;
+    counter-increment: item;
+    height: 80%;
+    bottom: 50%;
+}
+
+.orline > li::before,
+.orline > li::after {
+    border-right-color: #1ba064 !important;
+    border-bottom-color: #1ba064 !important;
+}
+
+.andline > li::before,
+.andline > li::after {
+    border-right-color: #2972c8 !important;
+    border-bottom-color: #2972c8 !important;
+}
+
+.adsea li::after {
+    height: 80%;
+    top: 0%;
+    transform: translate(0, 50%);
+    border-right: 1px solid;
+    content: "";
+    position: absolute;
+    right: -50px;
+    width: 50px;
+}
+
+.adsea li:last-of-type:after {
+    height: 0%;
+}
+
+.adsea li:first-child:before {
+    border-right: 1px solid white !important;
+    height: 100%;
+    z-index: 20;
+}
