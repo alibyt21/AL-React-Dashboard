@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
+import PermissionBasedComponent from 'src/components/PermissionBasedComponent/PermissionBasedComponent';
 import sidebarContext from "src/context/sidebarContext";
 
 export default function SidebarMainSingle({ item }) {
     const { sidebarState, handleSidebar, selectedMainMenu, setSelectedMainMenu } = useContext(sidebarContext);
     return (
-        <>
+        <PermissionBasedComponent permission={item.permission}>
             {
                 item.subs
                     ?
@@ -33,6 +34,6 @@ export default function SidebarMainSingle({ item }) {
                         </span>
                     </Link>
             }
-        </>
+        </PermissionBasedComponent>
     )
 }
