@@ -1,5 +1,5 @@
 :root {
-  --primary-color: #755a00;
+  --primary-color: #50C4ED;
   --secondary-color: #ffffff;
 }
 
@@ -74,7 +74,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .Toastify__toast-body {
   font-family: 'IRANSansWebFaNum';
 }
@@ -123,7 +122,7 @@ code {
 /* END custom scroll bar */
 
 .login-container {
-  background-image: url("/public/assets/img/backgrounds/bg4.jpg");
+  background-image: url("/public/assets/img/backgrounds/bg2.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -147,13 +146,15 @@ input:focus-visible {
 /* START select */
 
 input[type=text],
-input[type=number] {
+input[type=number],
+input[type=textarea] {
   background-color: white;
   transition: 0.05s all linear;
 }
 
 .dark input[type=text],
-.dark input[type=number] {
+.dark input[type=number],
+.dark input[type=textarea] {
   background-color: black;
 
 }
@@ -191,3 +192,39 @@ tr:nth-child(even) {
 }
 
 /* END table */
+
+/* START checkbox */
+input.switch[type="checkbox"] {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #ddd;
+  outline: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  box-shadow: inset 0 0 5px rgb(0 0 0 / 20%);
+}
+
+input.switch[type="checkbox"]::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: 0.3s;
+}
+
+input.switch[type="checkbox"]:checked::before {
+  transform: translateX(120%);
+  background: #fff;
+}
+
+input.switch[type="checkbox"]:checked {
+  background: #22c55e;
+}
+/* END checkbox */
