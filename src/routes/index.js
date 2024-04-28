@@ -19,8 +19,6 @@ export const createRoutes = (routes) => {
                 }
             )
         })
-    } else {
-        return [];
     }
     return newRoutes;
 }

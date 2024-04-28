@@ -11,7 +11,7 @@ export default function SubItem({ item }) {
 
 
   useEffect(() => {
-    setIsCurrentPage(window.location.href == window.origin + item.to)
+    setIsCurrentPage(window.location.href == window.origin + item.path)
   }, [location, selectedMainMenu]);
 
   return (
@@ -22,7 +22,7 @@ export default function SubItem({ item }) {
             !item.subs || (item.subs && !item.subs.some(single => single.inMenu))
               ?
               (
-                <Link to={item.to}>
+                <Link to={item.path}>
                   <div className="flex gap-1 w-full cursor-pointer select-none items-center p-2 rounded-md hover:bg-gray-100 hover:dark:bg-gray-800 text-sm">
                     <span>
                       {item.icon}

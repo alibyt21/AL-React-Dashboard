@@ -23,7 +23,7 @@ export default function SidebarMainSingle({ item }) {
                     </div>
                     :
                     <Link
-                        to={item.to}
+                        to={item.path}
                         className='transition-all ease-in-out duration-300 mx-1 flex flex-col items-center gap-1 p-[5px] cursor-pointer select-none rounded-md hover:bg-gray-100 text-sm'
                     >
                         <span>
