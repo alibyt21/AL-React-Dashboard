@@ -20,7 +20,7 @@ export default function Dashboard({ children }) {
 
   const [sidebarState, setSidebarState] = useState(window.innerWidth < 1024 ? 0 : defaultSidebarState); // 0 == both is close , 1 == main is open, 2 == both is open;
   const [prevSidebarState, setPrevSidebarState] = useState(sidebarState);
-  const [selectedMainMenu, setSelectedMainMenu] = useState(menuArray[0]);
+  const [selectedMainMenu, setSelectedMainMenu] = useState(menuArray[menuArray.findIndex(single => single.inMenu)]);
 
   const handleSidebar = (newSidebarState = false) => {
     let newValue;
@@ -59,7 +59,6 @@ export default function Dashboard({ children }) {
 
   return (
     <sidebarContext.Provider value={{ sidebarState, handleSidebar, selectedMainMenu, setSelectedMainMenu }}>
-
       <div className="flex h-screen overflow-y-hidden bg-white text-gray-700 dark:text-white">
         {/* <Loading /> */}
         <SidebarBackdrop state={sidebarState} />

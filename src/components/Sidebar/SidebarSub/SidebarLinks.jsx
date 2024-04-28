@@ -8,7 +8,7 @@ export default function SidebarLinks() {
   return (
     <nav className="flex flex-col gap-1 p-2 flex-1 overflow-hidden hover:overflow-y-auto font-normal">
       {selectedMainMenu.subs.map((item, index) => (
-        <SubItem item={item} key={index} />
+        item.inMenu === true && <SubItem item={item} key={index} />
       ))}
     </nav>
   );

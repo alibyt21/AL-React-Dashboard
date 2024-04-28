@@ -1,5 +1,28 @@
-import { appRoutes } from "./appRoutes";
-import { globalRoutes } from "./globalRoutes";
-import { userRoutes } from "./userRoutes";
+import menuArray from "src/settings/menu";
+import NotFound from "src/views/errors/NotFound";
+import PermissionBasedComponent from "src/components/PermissionBasedComponent";
 
-export const routes = [...globalRoutes, ...appRoutes, ...userRoutes];
+// routes create based on menu.js file
+export const createRoutes = (routes) => {
+    let newRoutes = [];
+    if (Array.isArray(routes)) {
+        routes.forEach(function (single) {
+            newRoutes.push(
+                {
+                    path: single.path,
+                    element:
+                        <PermissionBasedComponent permission={single.permission} isFull={true}>
+                            {single.element}
+                        </PermissionBasedComponent>,
+                    errorElement: <NotFound />,
+                    children: createRoutes(single.subs)
+                }
+            )
+        })
+    } else {
+        return [];
+    }
+    return newRoutes;
+}
+
+export const routes = createRoutes(menuArray);

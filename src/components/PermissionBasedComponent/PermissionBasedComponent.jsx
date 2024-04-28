@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import userPermissionContext from "src/context/userPermissionContext";
+import { Navigate } from "react-router-dom";
 
-export default function PermissionBasedComponent({ permission, children }) {
+export default function PermissionBasedComponent({ permission, children, isFull = false }) {
     let userPermissions = useContext(userPermissionContext)
     return (
         <>
@@ -14,7 +15,15 @@ export default function PermissionBasedComponent({ permission, children }) {
             }) ? (
                 children
             ) : (
-                <></>
+                isFull
+                    ?
+                    userPermissions.length
+                        ?
+                        <Navigate to="/user/denied" />
+                        :
+                        <></>
+                    :
+                    <></>
             )}
         </>
     );
