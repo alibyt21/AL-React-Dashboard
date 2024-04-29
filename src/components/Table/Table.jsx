@@ -39,6 +39,11 @@ export default function Table({
   const [padding, setPadding] = useState(4);
   const [isFiltersActive, setIsFiltersActive] = useState(false);
 
+  // this means data hasn't been loaded yet
+  if (!Array.isArray(data)) {
+    data = false;
+  }
+
   // init columns
   let tableColumns = [];
   if (!columns) {
@@ -104,14 +109,12 @@ export default function Table({
 
   return (
     <>
-      {
-        hasAdvancedSearch
-        &&
+      {hasAdvancedSearch && (
         <AdvancedFilter
           active={advancedFilterActive}
           setActive={setAdvancedFilterActive}
         />
-      }
+      )}
 
       <div className="relative">
         <div
@@ -165,9 +168,7 @@ export default function Table({
             />
           </div>
           <div className="flex gap-2 justify-center items-center">
-            {
-              hasAdvancedSearch
-              &&
+            {hasAdvancedSearch && (
               <div
                 className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
                 onClick={() => {
@@ -177,7 +178,7 @@ export default function Table({
                 <PiListMagnifyingGlass size={20} />
                 <span className="hidden lg:flex text-sm">جستجو پیشرفته</span>
               </div>
-            }
+            )}
             <div
               onClick={() => {
                 setIsFiltersActive(!isFiltersActive);
@@ -309,7 +310,7 @@ export default function Table({
                         ))}
                     </div> */}
           </table>
-          {data.length ? (
+          {!Array.isArray(data) ? (
             <div className="flex w-full bg-white dark:bg-black">
               <Spinner text="در حال بارگیری ..." />
             </div>
