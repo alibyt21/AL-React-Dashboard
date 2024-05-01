@@ -1,8 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Step from './Step';
 
-export default function MultiStep({ children }) {
-    const [activeTab, setActiveTab] = useState(0);
+export default function MultiStep({ children, activeStep = 0 }) {
+    const [activeTab, setActiveTab] = useState(activeStep);
+
+    useEffect(() => {
+        setActiveTab(activeStep)
+    }, [activeStep])
 
     return (
         <>
@@ -20,7 +24,7 @@ export default function MultiStep({ children }) {
                                         <div className={`transition-all duration-200 ease-in-out flex justify-center items-center rounded-full border-2 border-solid w-6 h-6 ${activeTab == index ? "bg-blue-300 border-blue-300" : "bg-gray-50 border-gray-100"}`}>
                                             <div className={`transition-all duration-200 ease-in-out w-2 h-2 rounded-full ${activeTab == index ? "bg-white" : "bg-gray-200"}`}></div>
                                         </div>
-                                        <Step title={child.props.title} subTitle={child.props.subTitle}/>
+                                        <Step title={child.props.title} subTitle={child.props.subTitle} />
                                     </div>
                                 )
                             }
