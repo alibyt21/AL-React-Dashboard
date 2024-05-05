@@ -11,7 +11,11 @@ import {
   moveBoth,
 } from "src/settings/config";
 import menuArray from "src/settings/menu";
+import { useLocation } from 'react-router-dom';
+
 export default function Dashboard({ children }) {
+  let location = useLocation();
+
   // set language and theme
   useEffect(() => {
     document.documentElement.setAttribute("lang", defaultLanguage);
@@ -20,7 +24,20 @@ export default function Dashboard({ children }) {
 
   const [sidebarState, setSidebarState] = useState(window.innerWidth < 1024 ? 0 : defaultSidebarState); // 0 == both is close , 1 == main is open, 2 == both is open;
   const [prevSidebarState, setPrevSidebarState] = useState(sidebarState);
-  const [selectedMainMenu, setSelectedMainMenu] = useState(menuArray[menuArray.findIndex(single => single.inMenu)]);
+  const [selectedMainMenu, setSelectedMainMenu] = useState(menuArray[findSelectedMenuBasedOnURL()]);
+
+  function findSelectedMenuBasedOnURL() {
+    let path = location.pathname;
+    // default value of selectedIndex is first item It should be displayed in menu (inMenu == true)
+    let selectedIndex = menuArray.findIndex(single => single.inMenu);
+    // looking to find menu that has matched with current url
+    menuArray.forEach(function (single, index) {
+      if (single.inMenu && path.includes(single.path)) {
+        selectedIndex = index;
+      }
+    })
+    return selectedIndex;
+  }
 
   const handleSidebar = (newSidebarState = false) => {
     let newValue;

@@ -26,7 +26,7 @@ import Home from "src/views/global/Home";
 // routes create based on this array
 const menuArray = [
     {
-        path: "/",
+        path: "",
         element: <PublicView />,
         permission: "VIEW_PROFILE",
         subs: [
@@ -49,7 +49,7 @@ const menuArray = [
             {
                 icon: <BiHome />,
                 label: "صفحه اصلی",
-                path: `${adminRoot}/dashboard`,
+                path: ``,
                 element: <Home />,
                 inMenu: true,
                 permission: "VIEW_PROFILE",
@@ -57,7 +57,7 @@ const menuArray = [
             {
                 icon: <LuDownload />,
                 label: "بارگذاری داده",
-                path: `${adminRoot}/dashboard/import-data`,
+                path: `import-data`,
                 element: <Outlet />,
                 inMenu: true,
                 permission: "VIEW_PROFILE",
@@ -131,17 +131,17 @@ const menuArray = [
         permission: "VIEW_PROFILE",
         subs: [
             {
-                path: "login/",
+                path: "login",
                 element: <Login />,
                 permission: "VIEW_PROFILE",
             },
             {
-                path: "register/",
+                path: "register",
                 element: <Login />,
                 permission: "VIEW_PROFILE",
             },
             {
-                path: "denied/",
+                path: "denied",
                 element: <Denied />,
                 permission: "VIEW_PROFILE",
             },
