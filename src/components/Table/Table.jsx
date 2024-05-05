@@ -29,9 +29,6 @@ export default function Table({
   data,
   columns,
   hasAdvancedSearch = false,
-  active,
-  setActive,
-  repositorySystems,
 }) {
   const [advancedFilterActive, setAdvancedFilterActive] = useState(false);
   const [columnHidingIsActive, setColumnHidingIsActive] = useState(false);
