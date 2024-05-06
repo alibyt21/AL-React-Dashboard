@@ -227,4 +227,15 @@ input.switch[type="checkbox"]:checked::before {
 input.switch[type="checkbox"]:checked {
   background: #22c55e;
 }
+
 /* END checkbox */
+
+.breadcrumb-item+.breadcrumb-item:before {
+  content: "»";
+  color: #cccccc;
+}
+
+.breadcrumb-item+.breadcrumb-item:before {
+  padding-left: .5rem;
+  padding-right: .5rem;
+}
