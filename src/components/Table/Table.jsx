@@ -6,6 +6,7 @@ import { LuArrowDownUp } from "react-icons/lu";
 import { PiRows } from "react-icons/pi";
 import { PiFunnelSimple } from "react-icons/pi";
 import { PiListMagnifyingGlass } from "react-icons/pi";
+import { AiOutlineFontSize } from "react-icons/ai";
 
 import {
   createColumnHelper,
@@ -32,6 +33,8 @@ export default function Table({
 }) {
   const [advancedFilterActive, setAdvancedFilterActive] = useState(false);
   const [columnHidingIsActive, setColumnHidingIsActive] = useState(false);
+  const [fontSizeIsActive, setFontSizeIsActive] = useState(false)
+  const [tableFontSize, setTableFontSize] = useState(12)
   const [globalFilter, setGlobalFilter] = useState("");
   const [padding, setPadding] = useState(4);
   const [isFiltersActive, setIsFiltersActive] = useState(false);
@@ -153,6 +156,64 @@ export default function Table({
             );
           })}
         </div>
+        <div
+          className={`${fontSizeIsActive
+            ? "visible opacity-100 translate-y-0"
+            : "invisible opacity-0 translate-y-6"
+            } transition-all ease-in-out duration-200 z-[10] absolute lg:left-[355px] left-[150px] top-[50px] inline-flex flex-col rounded-xl bg-white dark:bg-black shadow-al select-none`}
+        >
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2 hover:bg-gray-100 p-2 px-5">
+              <input type="radio" id="8" name="font-size" value="8"
+                onChange={() => setTableFontSize(8)}
+              />
+              <label for="8">
+                8
+              </label>
+            </div>
+            <div className="flex items-center gap-2 hover:bg-gray-100 p-2 px-5">
+              <input type="radio" id="10" name="font-size" value="10"
+                onChange={() => setTableFontSize(10)}
+              />
+              <label for="10">
+                10
+              </label>
+            </div>
+            <div className="flex items-center gap-2 hover:bg-gray-100 p-2 px-5">
+              <input type="radio" id="12" name="font-size" value="12"
+                onChange={() => setTableFontSize(12)}
+              />
+              <label for="12">
+                12
+              </label>
+            </div>
+            <div className="flex items-center gap-2 hover:bg-gray-100 p-2 px-5">
+              <input type="radio" id="14" name="font-size" value="14"
+                onChange={() => setTableFontSize(14)}
+              />
+              <label for="14">
+                14
+              </label>
+            </div>
+            <div className="flex items-center gap-2 hover:bg-gray-100 p-2 px-5">
+              <input type="radio" id="16" name="font-size" value="16"
+                onChange={() => setTableFontSize(16)}
+              />
+              <label for="16">
+                16
+              </label>
+            </div>
+            <div className="flex items-center gap-2 hover:bg-gray-100 p-2 px-5">
+              <input type="radio" id="18" name="font-size" value="18"
+                onChange={() => setTableFontSize(18)}
+              />
+              <label for="18">
+                18
+              </label>
+            </div>
+          </div>
+
+        </div>
         <div className="select-none w-full flex items-center justify-between bg-white dark:bg-black shadow-al rounded-xl my-2 p-2 px-3">
           <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[200px] lg:w-[300px]">
             <HiMagnifyingGlass className="text-gray-300" size={20} />
@@ -178,6 +239,15 @@ export default function Table({
             )}
             <div
               onClick={() => {
+                setFontSizeIsActive(!fontSizeIsActive);
+              }}
+              className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
+            >
+              <AiOutlineFontSize size={20} />
+              <span className="hidden lg:flex text-sm">اندازه فونت</span>
+            </div>
+            <div
+              onClick={() => {
                 setIsFiltersActive(!isFiltersActive);
               }}
               className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
@@ -194,7 +264,6 @@ export default function Table({
               <PiTextColumns size={20} />
               <span className="hidden lg:flex text-sm">فیلتر ستون</span>
             </div>
-
             <div
               onClick={() => {
                 handlePadding();
@@ -208,7 +277,10 @@ export default function Table({
         </div>
         <div className="overflow-x-auto rounded-xl">
           <table className="table w-full bg-white dark:bg-black shadow-al rounded-xl overflow-x-auto">
-            <tbody className="tbody w-full bg-white dark:bg-black rounded-b-xl">
+            <tbody
+              className="tbody w-full bg-white dark:bg-black rounded-b-xl"
+              style={{ fontSize: `${tableFontSize}px` }}
+            >
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr
                   key={headerGroup.id}
