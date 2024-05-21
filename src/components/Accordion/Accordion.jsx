@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import useToggleActive from "src/utils/useToggleActive";
 import { HiChevronDown } from "react-icons/hi";
 
-export default function Accordion({ title, children, isOpen, icon }) {
+export default function Accordion({ title, children, isOpen, icon, hasVerticalLine = false }) {
 
     const { isActive, handleToggle } = useToggleActive(isOpen);
     const [contentHeight, setContentHeight] = useState(0);
@@ -31,10 +31,17 @@ export default function Accordion({ title, children, isOpen, icon }) {
                 style={{ maxHeight: `${isActive ? `${contentHeight ? contentHeight : 9999999}px` : "0px"}` }}
             >
                 <div
-                    className={`${isActive ? "visible opacity-100" : "invisible opacity-0"} py-1 transition-all duration-200 select-none cursor-default text-gray-700 font-light`}
+                    className={`${isActive ? "visible opacity-100" : "invisible opacity-0"} flex py-1 transition-all duration-200 select-none cursor-default text-gray-700 font-light`}
                     ref={contentRef}
                 >
-                    {children}
+                    {
+                        hasVerticalLine
+                        &&
+                        <div className="h-auto w-[1px] bg-gray-200 mx-2"></div>
+                    }
+                    <div className="w-full">
+                        {children}
+                    </div>
                 </div>
             </div>
         </div>
