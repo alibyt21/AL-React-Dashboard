@@ -35,7 +35,7 @@ export default function SubItem({ item }) {
               )
               :
               (
-                <Accordion title={item.label} icon={item.icon}>
+                <Accordion title={item.label} icon={item.icon} isOpen={true}>
                   <div className="flex flex-col gap-1">
                     {item.subs.map((sub, idx) => {
                       if (sub.inMenu !== false) {
