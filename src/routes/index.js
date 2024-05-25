@@ -1,6 +1,7 @@
 import menuArray from "src/settings/menu";
 import NotFound from "src/views/errors/NotFound";
 import PermissionBasedComponent from "src/components/PermissionBasedComponent";
+import * as React from 'react';
 
 // routes create based on menu.js file
 export const createRoutes = (routes) => {
@@ -11,9 +12,18 @@ export const createRoutes = (routes) => {
                 {
                     path: single.path,
                     element:
-                        <PermissionBasedComponent permission={single.permission} isFull={true}>
-                            {single.element}
-                        </PermissionBasedComponent>,
+                        typeof (single.element?.type) == "object"
+                            ?
+                            <React.Suspense fallback={<>...</>}>
+                                <PermissionBasedComponent permission={single.permission} isFull={true}>
+                                    {single.element}
+                                </PermissionBasedComponent>
+                            </React.Suspense>
+                            :
+                            <PermissionBasedComponent permission={single.permission} isFull={true}>
+                                {single.element}
+                            </PermissionBasedComponent>
+                    ,
                     errorElement: <NotFound />,
                     children: createRoutes(single.subs)
                 }

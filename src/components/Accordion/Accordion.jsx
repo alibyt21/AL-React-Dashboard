@@ -18,7 +18,7 @@ export default function Accordion({ title, children, isOpen, icon, hasVerticalLi
         >
             <div
                 onClick={handleToggle}
-                className="flex justify-between items-center p-2 hover:bg-gray-100 rounded-md text-sm"
+                className="flex justify-between items-center p-2 hover:bg-gray-100 hover:dark:bg-gray-800 rounded-md text-sm"
             >
                 <div className="flex items-center gap-1">
                     {icon}
@@ -31,7 +31,7 @@ export default function Accordion({ title, children, isOpen, icon, hasVerticalLi
                 style={{ maxHeight: `${isActive ? `${contentHeight ? contentHeight : 9999999}px` : "0px"}` }}
             >
                 <div
-                    className={`${isActive ? "visible opacity-100" : "invisible opacity-0"} flex py-1 transition-all duration-200 select-none cursor-default text-gray-700 font-light`}
+                    className={`${isActive ? "visible opacity-100" : "invisible opacity-0"} flex py-1 select-none cursor-default font-light`}
                     ref={contentRef}
                 >
                     {
