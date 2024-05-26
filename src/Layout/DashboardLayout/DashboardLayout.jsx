@@ -4,8 +4,9 @@ import SettingPanel from "src/components/SettingPanel";
 import Main from "src/components/Main";
 import Sidebar from "src/components/Sidebar";
 import { useEffect, useState } from "react";
-import sidebarContext from "src/context/sidebarContext";
+import dashboardContext from "src/context/dashboardContext";
 import {
+  defaultDirection,
   defaultLanguage,
   defaultSidebarState,
   moveBoth,
@@ -16,15 +17,13 @@ import { useLocation } from 'react-router-dom';
 export default function Dashboard({ children }) {
   let location = useLocation();
 
-  // set language and theme
-  useEffect(() => {
-    document.documentElement.setAttribute("lang", defaultLanguage);
-    // theme setting may be go there
-  }, []);
+
 
   const [sidebarState, setSidebarState] = useState(window.innerWidth < 1024 ? 0 : defaultSidebarState); // 0 == both is close , 1 == main is open, 2 == both is open;
   const [prevSidebarState, setPrevSidebarState] = useState(sidebarState);
   const [selectedMainMenu, setSelectedMainMenu] = useState(menuArray[findSelectedMenuBasedOnURL()]);
+  const [direction, setDirection] = useState(localStorage.getItem("dir") ? localStorage.getItem("dir") : defaultDirection);
+
 
   function findSelectedMenuBasedOnURL() {
     let path = location.pathname;
@@ -74,8 +73,20 @@ export default function Dashboard({ children }) {
     setSidebarState(newValue);
   };
 
+  // set direction of panel
+  useEffect(() => {
+    document.documentElement.setAttribute("dir", direction);
+    localStorage.setItem("dir", direction);
+  }, [direction])
+
+  // set language and theme
+  useEffect(() => {
+    document.documentElement.setAttribute("lang", defaultLanguage);
+    // theme setting may be go there
+  }, []);
+
   return (
-    <sidebarContext.Provider value={{ sidebarState, handleSidebar, selectedMainMenu, setSelectedMainMenu }}>
+    <dashboardContext.Provider value={{ sidebarState, handleSidebar, selectedMainMenu, setSelectedMainMenu, direction, setDirection }}>
       <div className="flex h-screen overflow-y-hidden bg-white text-gray-700 dark:text-white">
         {/* <Loading /> */}
         <SidebarBackdrop state={sidebarState} />
@@ -83,6 +94,6 @@ export default function Dashboard({ children }) {
         <Main>{children}</Main>
         <SettingPanel />
       </div>
-    </sidebarContext.Provider>
+    </dashboardContext.Provider>
   );
 }

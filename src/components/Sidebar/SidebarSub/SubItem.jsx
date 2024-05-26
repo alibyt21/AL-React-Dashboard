@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Accordion from "src/components/Accordion";
 import PermissionBasedComponent from "src/components/PermissionBasedComponent/PermissionBasedComponent";
-import sidebarContext from "src/context/sidebarContext";
+import dashboardContext from "src/context/dashboardContext";
 
 export default function SubItem({ item }) {
   const [isCurrentPage, setIsCurrentPage] = useState(false)
   const location = useLocation();
-  const { selectedMainMenu } = useContext(sidebarContext)
+  const { selectedMainMenu } = useContext(dashboardContext)
 
 
   useEffect(() => {

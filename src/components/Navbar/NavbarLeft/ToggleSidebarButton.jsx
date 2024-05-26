@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import sidebarContext from "src/context/sidebarContext";
+import dashboardContext from "src/context/dashboardContext";
 
 export default function ToggleSidebarButton() {
-  const { sidebarState, handleSidebar } = useContext(sidebarContext);
+  const { sidebarState, handleSidebar } = useContext(dashboardContext);
   return (
     <div
       className="flex gap-1 cursor-pointer"

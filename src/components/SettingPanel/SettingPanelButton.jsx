@@ -1,5 +1,8 @@
+import { useContext } from "react"
+import dashboardContext from "src/context/dashboardContext"
 
-export default function SettingPanelButton({ handleState, direction }) {
+export default function SettingPanelButton({ handleState }) {
+    const { direction } = useContext(dashboardContext)
     return (
         <div>
             <button

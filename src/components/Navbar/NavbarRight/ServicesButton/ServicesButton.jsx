@@ -4,12 +4,19 @@ import Modal from "src/components/Modal";
 import ModalBody from "src/components/Modal/ModalBody";
 import { defaultHeaderHeight } from "src/settings/config";
 
-export default function ServicesButton() {
+export default function ServicesButton({ direction }) {
     const [active, setActive] = useState(false);
     return (
         <div>
             <Button toggle={() => setActive(true)} />
-            <Modal isOpen={active} toggle={() => setActive(false)} width={300} top={defaultHeaderHeight} left={185}>
+            <Modal
+                isOpen={active}
+                toggle={() => setActive(false)}
+                width={300}
+                top={defaultHeaderHeight}
+                left={direction == "rtl" && 185}
+                right={direction != "rtl" && 185}
+            >
                 <ModalBody>
                     <div className="p-4 text-lg font-medium border-b">
                         Web apps & services

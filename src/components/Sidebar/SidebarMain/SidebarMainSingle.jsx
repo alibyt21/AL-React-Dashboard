@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import PermissionBasedComponent from 'src/components/PermissionBasedComponent';
-import sidebarContext from "src/context/sidebarContext";
+import dashboardContext from "src/context/dashboardContext";
 
 export default function SidebarMainSingle({ item }) {
-    const { sidebarState, handleSidebar, selectedMainMenu, setSelectedMainMenu } = useContext(sidebarContext);
+    const { sidebarState, handleSidebar, selectedMainMenu, setSelectedMainMenu } = useContext(dashboardContext);
     return (
         <PermissionBasedComponent permission={item.permission}>
             {

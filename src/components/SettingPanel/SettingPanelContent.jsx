@@ -1,8 +1,10 @@
+import { useContext } from "react";
 import { IoMdClose } from "react-icons/io";
 import { PiFadersFill } from "react-icons/pi";
+import dashboardContext from "src/context/dashboardContext";
 
-export default function SettingPanelContent({ state, handleState,direction,setDirection }) {
-    
+export default function SettingPanelContent({ state, handleState }) {
+    const { direction, setDirection } = useContext(dashboardContext)
 
     return (
         <div

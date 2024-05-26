@@ -7,12 +7,19 @@ import ModalBody from "src/components/Modal/ModalBody";
 import ModalFooter from "src/components/Modal/ModalFooter";
 import { defaultHeaderHeight } from "src/settings/config";
 
-export default function AvatarButton() {
+export default function AvatarButton({ direction }) {
     const [active, setActive] = useState(false);
     return (
         <div className="relative">
             <Button isActive={active} toggle={() => setActive(true)} />
-            <Modal isOpen={active} toggle={() => setActive(false)} top={defaultHeaderHeight} left={10} width={300}>
+            <Modal
+                isOpen={active}
+                toggle={() => setActive(false)}
+                top={defaultHeaderHeight}
+                width={300}
+                left={direction == "rtl" && 10}
+                right={direction != "rtl" && 10}
+            >
                 {/* <ModalHeader toggle={() => setActive(false)} >
                     salam
                 </ModalHeader> */}

@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import sidebarContext from "src/context/sidebarContext";
+import { useContext } from "react";
+import dashboardContext from "src/context/dashboardContext";
 import { defaultSidebarMainWidth } from "src/settings/config";
 import SidebarMainSingle from "./SidebarMainSingle";
 import SidebarHeader from "./SidebarHeader";
@@ -7,7 +7,7 @@ import SidebarFooter from "./SidebarFooter";
 import SidebarLinks from "./SidebarLinks";
 
 export default function SidebarMain() {
-  const { sidebarState } = useContext(sidebarContext);
+  const { sidebarState } = useContext(dashboardContext);
 
   return (
     <aside

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-export default function Modal({ isOpen, toggle, children, width = 800, top = 0, left = 0 }) {
-
+export default function Modal({ isOpen, toggle, children, width = 800, top = 0, left, right }) {
 
     return (
         <>
@@ -11,8 +10,13 @@ export default function Modal({ isOpen, toggle, children, width = 800, top = 0, 
             >
                 <div
                     onClick={e => e.stopPropagation()}
-                    className={`${isOpen ? "" : "translate-y-20"} ${top && left ? "absolute" : ""} bg-white transition-all duration-300 ease-in-out m-auto w-full shadow-lg rounded`}
-                    style={{ maxWidth: `${width}px`, top: `${top}px`, left: `${left}px` }}
+                    className={`${isOpen ? "" : "translate-y-20"} ${(top && left) || (top && right) ? "absolute" : ""} bg-white transition-all duration-300 ease-in-out m-auto w-full shadow-lg rounded`}
+                    style={{
+                        maxWidth: `${width}px`,
+                        top: `${top}px`,
+                        ...(left ? { left: `${left}px` } : {}),
+                        ...(right ? { right: `${right}px` } : {}),
+                    }}
                 >
                     {children}
                 </div>

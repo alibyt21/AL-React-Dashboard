@@ -4,12 +4,19 @@ import Modal from "src/components/Modal";
 import ModalBody from "src/components/Modal/ModalBody";
 import { defaultHeaderHeight } from "src/settings/config";
 
-export default function OptionsButton() {
+export default function OptionsButton({ direction }) {
     const [active, setActive] = useState(false);
     return (
         <div className="relative">
             <Button toggle={() => setActive(true)} />
-            <Modal isOpen={active} toggle={() => setActive(false)} width={300} top={defaultHeaderHeight} left={140}>
+            <Modal
+                isOpen={active}
+                toggle={() => setActive(false)}
+                width={300}
+                top={defaultHeaderHeight}
+                left={direction == "rtl" && 140}
+                right={direction != "rtl" && 140}
+            >
                 <ModalBody>
                     <div className="p-4 font-medium border-b">
                         <span className="text-gray-800">
