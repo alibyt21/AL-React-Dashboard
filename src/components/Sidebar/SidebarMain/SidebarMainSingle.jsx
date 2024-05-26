@@ -2,17 +2,21 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import PermissionBasedComponent from 'src/components/PermissionBasedComponent';
 import dashboardContext from "src/context/dashboardContext";
+import { mainMenuHasPage } from 'src/settings/config';
 
 export default function SidebarMainSingle({ item }) {
     const { sidebarState, handleSidebar, selectedMainMenu, setSelectedMainMenu } = useContext(dashboardContext);
     return (
         <PermissionBasedComponent permission={item.permission}>
             {
-                item.subs
+                item.subs && !mainMenuHasPage
                     ?
                     <div
                         className={`${item == selectedMainMenu ? "bg-[#cecece58]" : ""} transition-all ease-in-out duration-300 mx-1 flex flex-col items-center gap-1 p-[5px] cursor-pointer select-none rounded-md hover:bg-[#cecece32] text-sm`}
-                        onClick={() => { setSelectedMainMenu(item); handleSidebar(2) }}
+                        onClick={() => {
+                            setSelectedMainMenu(item);
+                            handleSidebar(2)
+                        }}
                     >
                         <span>
                             {item.icon}
@@ -24,7 +28,11 @@ export default function SidebarMainSingle({ item }) {
                     :
                     <Link
                         to={item.path}
-                        className='transition-all ease-in-out duration-300 mx-1 flex flex-col items-center gap-1 p-[5px] cursor-pointer select-none rounded-md hover:bg-gray-100 text-sm'
+                        className={`${item == selectedMainMenu ? "bg-[#cecece58]" : ""} transition-all ease-in-out duration-300 mx-1 flex flex-col items-center gap-1 p-[5px] cursor-pointer select-none rounded-md hover:bg-[#cecece58] text-sm`}
+                        onClick={() => {
+                            setSelectedMainMenu(item);
+                            handleSidebar(2)
+                        }}
                     >
                         <span>
                             {item.icon}

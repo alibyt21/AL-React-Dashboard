@@ -16,7 +16,7 @@ export default function SubItem({ item }) {
 
   return (
     <PermissionBasedComponent permission={item.permission}>
-      <ul className={` ${isCurrentPage ? "bg-gray-100 dark:bg-gray-700" : ""} rounded-md overflow-hidden`} >
+      <ul className={` ${isCurrentPage ? "bg-gray-100 dark:bg-gray-700" : ""} rounded-md`} >
         <li>
           {
             !item.subs || (item.subs && !item.subs.some(single => single.inMenu))
