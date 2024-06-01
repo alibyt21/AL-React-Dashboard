@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import Tab from './Tab';
 
-export default function MultiTab({ children, type = 1 }) {
+export default function MultiTab({ children, type = 1, justify = "start" }) {
     // children always should be an array
     if (!Array.isArray(children)) {
         children = [children]
@@ -19,45 +20,28 @@ export default function MultiTab({ children, type = 1 }) {
 
     return (
 
-        <div className='flex flex-col gap-3'>
-            <div className={`flex ${type != 1 && "gap-2"}`}>
-                {
-                    children.map(
-                        (child) => {
-                            if (type == 1) {
+        <div className='w-full flex flex-col gap-4'>
+            <div className={`flex justify-${justify}`}>
+                <div className={`${type == 3 ? "border boder-gray-200 border-solid" : ""} flex ${type != 1 ? "gap-2" : ""} rounded-2xl p-1`}>
+                    {
+                        children.map(
+                            (child) => {
                                 return (
-                                    <button
-                                        onClick={() => handleTabChange(child?.props?.title)}
-                                        className={`${activeTab === child?.props?.title ? 'border-gray-300' : 'border-gray-100'} border-solid border-b-2 px-2 pb-2`}
-                                    >
-                                        {
-                                            child?.props?.title
-                                        }
-                                    </button>
-                                )
-                            } else {
-                                return (
-                                    <button
-                                        onClick={() => handleTabChange(child?.props?.title)}
-                                        className={`${activeTab === child?.props?.title ? 'border-gray-300' : 'border-white'} border-solid border p-2 rounded-3xl`}
-                                    >
-                                        {
-                                            child?.props?.title
-                                        }
-                                    </button>
+                                    <Tab icon={child?.props?.icon} title={child?.props?.title} handleTabChange={handleTabChange} activeTab={activeTab} type={type} />
                                 )
                             }
-                        }
-                    )
-                }
+                        )
+                    }
+                </div>
+
             </div>
-            <div>
+            <div className='w-full'>
                 {
                     children.map(
                         (child) => {
                             if (activeTab === child?.props?.title) {
                                 return (
-                                    <div>
+                                    <div className='w-full'>
                                         {child?.props.children}
                                     </div>
                                 )
