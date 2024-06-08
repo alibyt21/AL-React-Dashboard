@@ -214,13 +214,13 @@ export default function Table({
           </div>
 
         </div>
-        <div className="select-none w-full flex items-center justify-between bg-white dark:bg-black shadow-al rounded-xl my-2 p-2 px-3">
-          <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[200px] lg:w-[300px]">
+        <div className="select-none w-full flex flex-wrap gap-2 items-center justify-between bg-white dark:bg-black shadow-al rounded-xl my-2 p-2 px-3">
+          <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[200px] lg:w-[300px] bg-[#f5f8fa]">
             <HiMagnifyingGlass className="text-gray-300" size={20} />
             <input
               type="text"
               placeholder="جستجو ..."
-              className="focus:!border-none focus:!outline-none px-2"
+              className="focus:!border-none focus:!outline-none px-2 w-[140px] md:w-[190px] lg:w-[290px]"
               value={globalFilter || ""}
               onChange={(e) => setGlobalFilter(e.target.value)}
             />
@@ -253,7 +253,7 @@ export default function Table({
               className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
             >
               <PiFunnelSimple size={20} />
-              <span className="hidden lg:flex text-sm">فیلتر رکود</span>
+              <span className="hidden lg:flex text-sm">فیلتر رکورد</span>
             </div>
             <div
               onClick={() => {
