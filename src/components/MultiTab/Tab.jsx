@@ -1,3 +1,5 @@
+import styles from "./MultiTab.module.css";
+
 const Tab = ({ title, icon, activeTab, handleTabChange, type = 1 }) => {
     switch (type) {
         case 1:
@@ -28,6 +30,15 @@ const Tab = ({ title, icon, activeTab, handleTabChange, type = 1 }) => {
                 >
                     <div>{icon}</div>
                     <span>{title}</span>
+                </button>
+            )
+        case 4:
+            return (
+                <button
+                    onClick={() => handleTabChange(title)}
+                    className={activeTab === title ? styles.selected : ""}
+                >
+                    {title}
                 </button>
             )
     }

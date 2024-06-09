@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Tab from './Tab';
+import styles from "./MultiTab.module.css";
 
 export default function MultiTab({ children, type = 1, justify = "start" }) {
     // children always should be an array
@@ -20,9 +21,9 @@ export default function MultiTab({ children, type = 1, justify = "start" }) {
 
     return (
 
-        <div className='w-full flex flex-col gap-4'>
+        <div className={`w-full flex flex-col ${type != 4 ? "gap-4" : ""}`}>
             <div className={`flex justify-${justify}`}>
-                <div className={`${type == 3 ? "border boder-gray-200 border-solid" : ""} flex ${type != 1 ? "gap-2" : ""} rounded-2xl p-1`}>
+                <div className={`flex ${type != 4 ? "rounded-2xl p-1" : ""} ${type == 3 ? "border boder-gray-200 border-solid" : ""} ${type == 4 ? styles["nav-tab"] : ""} ${type == 4 ? styles["right"] : ""} ${type != 1 ? "gap-2" : ""}`}>
                     {
                         children.map(
                             (child) => {
@@ -35,7 +36,7 @@ export default function MultiTab({ children, type = 1, justify = "start" }) {
                 </div>
 
             </div>
-            <div className='w-full'>
+            <div className={`${type == 4 ? styles["main-content"] : ""} w-full`}>
                 {
                     children.map(
                         (child) => {
