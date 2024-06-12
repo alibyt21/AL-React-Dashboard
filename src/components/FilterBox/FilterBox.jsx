@@ -15,22 +15,26 @@ export default function FilterBox({ title, value, children }) {
     return (
 
         <div
-            className='relative select-none'
+            className='relative select-none cursor-pointer'
             style={{
                 width: `${filterBoxWidth}px`,
                 height: `50px`
             }}
         >
             <div
-                className={`${isSelected ? "shadow-lg border-white" : "border-gray-200"} flex flex-col gap-4 border border-solid z-[1] bg-white dark:bg-black whitespace-nowrap absolute transition-all ease-in-out duration-300 p-3 rounded-xl`}
-                onClick={() => { setIsSelected(!isSelected) }}
+                className={`${isSelected ? "shadow-lg border-white" : "border-gray-200"} flex flex-col gap-4 border border-solid bg-white dark:bg-black whitespace-nowrap absolute transition-all ease-in-out duration-300 p-3 rounded-xl`}
+
                 ref={filterBox}
                 style={{
                     height: isSelected ? `${filterBoxHeight}px` : "50px",
-                    width: `${filterBoxWidth}px`
+                    width: `${filterBoxWidth}px`,
+                    zIndex: isSelected ? `99999999` : `0`
                 }}
             >
-                <div className='flex items-center justify-between gap-2 select-none'>
+                <div
+                    className='flex items-center justify-between gap-2 select-none'
+                    onClick={() => { setIsSelected(!isSelected) }}
+                >
                     <div className='flex items-center gap-2'>
                         <span className='text-gray-500 text-sm'>
                             {title ? title + " : " : ""}
