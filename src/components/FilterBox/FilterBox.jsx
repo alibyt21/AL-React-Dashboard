@@ -22,7 +22,7 @@ export default function FilterBox({ title, value, children }) {
             }}
         >
             <div
-                className={`${isSelected ? "shadow-lg border-white" : "border-gray-200"} flex flex-col gap-4 border border-solid bg-white dark:bg-black whitespace-nowrap absolute transition-all ease-in-out duration-300 p-3 rounded-xl`}
+                className={`${isSelected ? "shadow-lg border-white" : "border-gray-200"} flex flex-col border border-solid bg-white dark:bg-black whitespace-nowrap absolute transition-all ease-in-out duration-300 rounded-xl`}
 
                 ref={filterBox}
                 style={{
@@ -32,7 +32,7 @@ export default function FilterBox({ title, value, children }) {
                 }}
             >
                 <div
-                    className='flex items-center justify-between gap-2 select-none'
+                    className='flex items-center justify-between gap-2 select-none p-3'
                     onClick={() => { setIsSelected(!isSelected) }}
                 >
                     <div className='flex items-center gap-2'>
@@ -47,7 +47,7 @@ export default function FilterBox({ title, value, children }) {
                         <FaAngleDown className={`${isSelected ? "rotate-180" : "rotate-0"} transition-all ease-in-out duration-300`} size={16} />
                     </span>
                 </div>
-                <div className={`${isSelected ? "visible opacity-100" : "invisible opacity-0"} flex flex-col gap-4 transition-all ease-in-out duration-200`}>
+                <div className={`${isSelected ? "visible opacity-100" : "invisible opacity-0"} p-3 pb-1 flex flex-col gap-4 transition-all ease-in-out duration-200`}>
                     {children}
                 </div>
             </div>
