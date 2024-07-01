@@ -23,6 +23,7 @@ import { rankItem } from "@tanstack/match-sorter-utils";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import Spinner from "../Spinner";
 import AdvancedFilter from "./AdvancedFilter";
+import { getClientStorage, setClientStorage } from "src/services/ClientStorage";
 
 const columnHelper = createColumnHelper();
 
@@ -39,6 +40,19 @@ export default function Table({
   const [padding, setPadding] = useState(4);
   const [isFiltersActive, setIsFiltersActive] = useState(false);
 
+  // helper function
+  String.prototype.hashCode = function () {
+    var hash = 0,
+      i, chr;
+    if (this.length === 0) return hash;
+    for (i = 0; i < this.length; i++) {
+      chr = this.charCodeAt(i);
+      hash = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  }
+
   // this means data hasn't been loaded yet
   if (!Array.isArray(data)) {
     data = false;
@@ -46,6 +60,7 @@ export default function Table({
 
   // init columns
   let tableColumns = [];
+  let visibleColumn = {};
   if (!columns) {
     data.map((object) => {
       Object.keys(object).forEach((key) => {
@@ -63,9 +78,13 @@ export default function Table({
     });
   } else {
     tableColumns = columns.map((column) => {
+      if (column.hideByDefault === true) {
+        visibleColumn[column.id] = false
+      }
       return columnHelper.accessor(column.id, column);
     });
   }
+  let tableName = tableColumns.toString().hashCode().toString();
 
   const fuzzyFilter = (row, columnId, value, addMeta) => {
     // Rank the item
@@ -87,6 +106,9 @@ export default function Table({
     columns: tableColumns,
     filterFns: {
       fuzzy: fuzzyFilter,
+    },
+    initialState: {
+      columnVisibility: getClientStorage("tables", true) && getClientStorage("tables", true)[tableName] ? getClientStorage("tables", true)[tableName].visibleColumn : visibleColumn
     },
     state: {
       globalFilter,
@@ -145,7 +167,26 @@ export default function Table({
                     {...{
                       type: "checkbox",
                       checked: column.getIsVisible(),
-                      onChange: column.getToggleVisibilityHandler(),
+                      onChange: (event) => {
+                        // Call the original toggle visibility handler
+                        column.getToggleVisibilityHandler()(event);
+
+                        // Add your custom logic here
+                        let tables = getClientStorage("tables", true);
+                        if (tables && tables[tableName]) {
+                          tables[tableName].visibleColumn[column.id] = !column.getIsVisible();
+                        } else {
+                          tables = {
+                            ...tables,
+                            [tableName]: {
+                              visibleColumn: {
+                                [column.id]: !column.getIsVisible()
+                              }
+                            }
+                          }
+                        }
+                        setClientStorage("tables", tables, true)
+                      },
                     }}
                   />{" "}
                   {typeof column.columnDef.header == "function"
