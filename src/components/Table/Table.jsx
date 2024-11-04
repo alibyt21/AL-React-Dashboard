@@ -20,10 +20,9 @@ import {
 
 import { rankItem } from "@tanstack/match-sorter-utils";
 
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import AdvancedFilter from "./AdvancedFilter";
-import { getClientStorage, setClientStorage } from "src/services/ClientStorage";
 
 const columnHelper = createColumnHelper();
 
@@ -31,27 +30,19 @@ export default function Table({
   data,
   columns,
   hasAdvancedSearch = false,
+  isSelective = true,
+  setSelected = () => { }
 }) {
+
+
   const [advancedFilterActive, setAdvancedFilterActive] = useState(false);
   const [columnHidingIsActive, setColumnHidingIsActive] = useState(false);
   const [fontSizeIsActive, setFontSizeIsActive] = useState(false)
-  const [tableFontSize, setTableFontSize] = useState(12)
+  const [tableFontSize, setTableFontSize] = useState(12);
+  const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState("");
   const [padding, setPadding] = useState(4);
   const [isFiltersActive, setIsFiltersActive] = useState(false);
-
-  // helper function
-  String.prototype.hashCode = function () {
-    var hash = 0,
-      i, chr;
-    if (this.length === 0) return hash;
-    for (i = 0; i < this.length; i++) {
-      chr = this.charCodeAt(i);
-      hash = ((hash << 5) - hash) + chr;
-      hash |= 0; // Convert to 32bit integer
-    }
-    return hash;
-  }
 
   // this means data hasn't been loaded yet
   if (!Array.isArray(data)) {
@@ -60,7 +51,6 @@ export default function Table({
 
   // init columns
   let tableColumns = [];
-  let visibleColumn = {};
   if (!columns) {
     data.map((object) => {
       Object.keys(object).forEach((key) => {
@@ -78,13 +68,39 @@ export default function Table({
     });
   } else {
     tableColumns = columns.map((column) => {
-      if (column.hideByDefault === true) {
-        visibleColumn[column.id] = false
-      }
       return columnHelper.accessor(column.id, column);
     });
   }
-  let tableName = tableColumns.toString().hashCode().toString();
+
+
+  if (isSelective) {
+    tableColumns.unshift({
+      id: 'select',
+      header: ({ table }) => (
+        <IndeterminateCheckbox
+          {...{
+            checked: table.getIsAllRowsSelected(),
+            indeterminate: table.getIsSomeRowsSelected(),
+            onChange: table.getToggleAllRowsSelectedHandler(),
+          }}
+        />
+      ),
+      enableSorting: false, // disable sorting for this column
+      cell: ({ row }) => (
+        <div className="px-1 text-center">
+          <IndeterminateCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              disabled: !row.getCanSelect(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler(),
+            }}
+          />
+        </div>
+      ),
+    },)
+  }
+
 
   const fuzzyFilter = (row, columnId, value, addMeta) => {
     // Rank the item
@@ -101,25 +117,6 @@ export default function Table({
 
   const rerender = useReducer(() => ({}), {})[1];
 
-  const table = useReactTable({
-    data: data,
-    columns: tableColumns,
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
-    initialState: {
-      columnVisibility: getClientStorage("tables", true) && getClientStorage("tables", true)[tableName] ? getClientStorage("tables", true)[tableName].visibleColumn : visibleColumn
-    },
-    state: {
-      globalFilter,
-    },
-    onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: fuzzyFilter,
-    getFilteredRowModel: getFilteredRowModel(),
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(), //provide a sorting row model
-  });
 
   const handlePadding = () => {
     if (padding >= 6) {
@@ -128,6 +125,30 @@ export default function Table({
       setPadding((padding) => padding + 2);
     }
   };
+
+  const table = useReactTable({
+    data: data,
+    columns: tableColumns,
+    filterFns: {
+      fuzzy: fuzzyFilter,
+    },
+    state: {
+      globalFilter,
+      rowSelection,
+    },
+    onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: fuzzyFilter,
+    getFilteredRowModel: getFilteredRowModel(),
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(), //provide a sorting row model
+  })
+
+  useEffect(() => {
+    setSelected(table.getSelectedRowModel())
+  }, [rowSelection])
+
 
   return (
     <>
@@ -139,6 +160,15 @@ export default function Table({
       )}
 
       <div className="relative">
+        <div
+          className="w-full h-full fixed top-0 left-0 opacity-0 z-[2]"
+          onClick={() => {
+            setColumnHidingIsActive(false);
+          }}
+          style={{
+            visibility: columnHidingIsActive ? "visible" : "hidden",
+          }}
+        ></div>
         <div
           className={`${columnHidingIsActive
             ? "visible opacity-100 translate-y-0"
@@ -158,7 +188,11 @@ export default function Table({
               همه
             </label>
           </div>
-          {table.getAllLeafColumns().map((column) => {
+          {table.getAllLeafColumns().filter(el => {
+            if (el.id != "select") {
+              return el;
+            }
+          }).map((column) => {
             return (
               <div key={column.id} className="hover:bg-gray-100 p-2 px-5">
                 <label className="cursor-pointer">
@@ -167,26 +201,7 @@ export default function Table({
                     {...{
                       type: "checkbox",
                       checked: column.getIsVisible(),
-                      onChange: (event) => {
-                        // Call the original toggle visibility handler
-                        column.getToggleVisibilityHandler()(event);
-
-                        // Add your custom logic here
-                        let tables = getClientStorage("tables", true);
-                        if (tables && tables[tableName]) {
-                          tables[tableName].visibleColumn[column.id] = !column.getIsVisible();
-                        } else {
-                          tables = {
-                            ...tables,
-                            [tableName]: {
-                              visibleColumn: {
-                                [column.id]: !column.getIsVisible()
-                              }
-                            }
-                          }
-                        }
-                        setClientStorage("tables", tables, true)
-                      },
+                      onChange: column.getToggleVisibilityHandler(),
                     }}
                   />{" "}
                   {typeof column.columnDef.header == "function"
@@ -195,8 +210,19 @@ export default function Table({
                 </label>
               </div>
             );
+
+
           })}
         </div>
+        <div
+          className="w-full h-full fixed top-0 left-0 opacity-0 z-[2]"
+          onClick={() => {
+            setFontSizeIsActive(false);
+          }}
+          style={{
+            visibility: fontSizeIsActive ? "visible" : "hidden",
+          }}
+        ></div>
         <div
           className={`${fontSizeIsActive
             ? "visible opacity-100 translate-y-0"
@@ -205,7 +231,11 @@ export default function Table({
         >
           <div className="flex flex-col">
             <div className="flex items-center gap-2 hover:bg-gray-100 p-2 px-5">
-              <input type="radio" id="8" name="font-size" value="8"
+              <input
+                type="radio"
+                id="8"
+                name="font-size"
+                value="8"
                 onChange={() => setTableFontSize(8)}
               />
               <label for="8">
@@ -323,18 +353,22 @@ export default function Table({
               style={{ fontSize: `${tableFontSize}px` }}
             >
               {table.getHeaderGroups().map((headerGroup) => (
+
                 <tr
                   key={headerGroup.id}
                   className="tr border-b border-solid border-gray-300 w-full"
                 >
+
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className={`th transition-all ease-in-out duration-200 p-${padding}`}
+                      className={`th text-center transition-all ease-in-out duration-200 p-${padding}`}
                       colSpan={header.colSpan}
                     >
                       {header.isPlaceholder ? null : (
                         <>
+
+
                           <div
                             className={
                               header.column.getCanSort()
@@ -361,12 +395,16 @@ export default function Table({
                               asc: <LuArrowDownAZ size={18} />,
                               desc: <LuArrowDownZA size={18} />,
                             }[header.column.getIsSorted().toString()] || (
+                                header.column.getCanSort()
+                                &&
                                 <LuArrowDownUp
                                   size={18}
                                   className="opacity-15 hover:opacity-40 transition-all ease-in-out duration-300"
                                 />
+
                               )}
                           </div>
+
                           {header.column.getCanFilter() ? (
                             <div
                               className={`${isFiltersActive
@@ -384,22 +422,25 @@ export default function Table({
                 </tr>
               ))}
               {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="tr last:border-none border-b border-solid border-gray-100 hover:bg-blue-50 dark:hover:bg-gray-800"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className={`td transition-all ease-in-out duration-200 p-${padding}`}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
+                <>
+
+                  <tr
+                    key={row.id}
+                    className="tr last:border-none border-b border-solid border-gray-100 hover:bg-blue-50 dark:hover:bg-gray-800"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className={`td transition-all ease-in-out duration-200 p-${padding}`}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                </>
               ))}
             </tbody>
 
@@ -505,6 +546,7 @@ export default function Table({
           </select>
           <span className="text-sm">رکورد در صفحه</span>
         </div>
+
       </div>
     </>
   );
@@ -572,6 +614,29 @@ function Filter({ column, table }) {
       <div className="h-1" />
     </>
   );
+}
+
+function IndeterminateCheckbox({
+  indeterminate,
+  className = '',
+  ...rest
+}) {
+  const ref = useRef()
+
+  useEffect(() => {
+    if (typeof indeterminate === 'boolean') {
+      ref.current.indeterminate = !rest.checked && indeterminate
+    }
+  }, [ref, indeterminate])
+
+  return (
+    <input
+      type="checkbox"
+      ref={ref}
+      className={className + ' cursor-pointer'}
+      {...rest}
+    />
+  )
 }
 
 // A debounced input react component
