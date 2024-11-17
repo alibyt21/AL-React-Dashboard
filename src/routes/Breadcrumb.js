@@ -46,18 +46,18 @@ export default function Breadcrumb() {
     }
 
     return (
-        <ol className="flex text-gray-500 text-sm">
-            <li className="breadcrumb-item hover:text-gray-700 transition-all ease-in-out duration-200">
+        <ol className="flex text-gray-500 dark:text-gray-300  text-sm">
+            <li className="breadcrumb-item hover:text-primary-color  transition-all ease-in-out duration-200">
                 <Link to={homeURL}>خانه</Link>
             </li>
             {
                 getBreadcrumbs(menuArray, findPathToObject(menuArray, path)).map(function (single) {
                     return (
-                        <li className="breadcrumb-item hover:text-gray-700 transition-all ease-in-out duration-200">
+                        <li className="breadcrumb-item hover:text-primary-color transition-all ease-in-out duration-200">
                             {
                                 path == single.path
                                     ?
-                                    single.label
+                                    <span className='text-primary-color'>{single.label}</span>
                                     :
                                     <Link to={single.path}>{single.label}</Link>
                             }
