@@ -5,7 +5,6 @@ import { LuArrowDownZA } from "react-icons/lu";
 import { LuArrowDownUp } from "react-icons/lu";
 import { PiRows } from "react-icons/pi";
 import { PiFunnelSimple } from "react-icons/pi";
-import { PiListMagnifyingGlass } from "react-icons/pi";
 import { AiOutlineFontSize } from "react-icons/ai";
 
 import {
@@ -22,25 +21,27 @@ import { rankItem } from "@tanstack/match-sorter-utils";
 
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import Spinner from "../Spinner";
-import AdvancedFilter from "./AdvancedFilter";
 
 const columnHelper = createColumnHelper();
 
 export default function Table({
   data,
   columns,
-  hasAdvancedSearch = false,
-  isSelective = true,
-  setSelected = () => { }
+  globalBackendSearch = null,
+  isSelective = false,
+  setSelected = () => { },
+  isLiveGlobalSearch = false,
+  setGlobalBackendSearch = () => { },
+  isBackendGlobalSearch = false,
 }) {
 
 
-  const [advancedFilterActive, setAdvancedFilterActive] = useState(false);
   const [columnHidingIsActive, setColumnHidingIsActive] = useState(false);
   const [fontSizeIsActive, setFontSizeIsActive] = useState(false)
   const [tableFontSize, setTableFontSize] = useState(12);
-  const [rowSelection, setRowSelection] = useState({})
+  const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
+  const [tempGlobalFilter, setTempGlobalFilter] = useState(globalBackendSearch)
   const [padding, setPadding] = useState(4);
   const [isFiltersActive, setIsFiltersActive] = useState(false);
 
@@ -152,13 +153,6 @@ export default function Table({
 
   return (
     <>
-      {hasAdvancedSearch && (
-        <AdvancedFilter
-          active={advancedFilterActive}
-          setActive={setAdvancedFilterActive}
-        />
-      )}
-
       <div className="relative">
         <div
           className="w-full h-full fixed top-0 left-0 opacity-0 z-[2]"
@@ -286,28 +280,56 @@ export default function Table({
 
         </div>
         <div className="select-none w-full flex flex-wrap gap-2 items-center justify-between bg-white dark:bg-black shadow-al rounded-xl my-2 p-2 px-3">
-          <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[200px] lg:w-[300px] bg-[#f5f8fa]">
-            <HiMagnifyingGlass className="text-gray-300" size={20} />
-            <input
-              type="text"
-              placeholder="جستجو ..."
-              className="focus:!border-none focus:!outline-none px-2 w-[140px] md:w-[190px] lg:w-[290px]"
-              value={globalFilter || ""}
-              onChange={(e) => setGlobalFilter(e.target.value)}
-            />
-          </div>
-          <div className="flex gap-2 justify-center items-center">
-            {hasAdvancedSearch && (
-              <div
-                className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
-                onClick={() => {
-                  setAdvancedFilterActive(true);
-                }}
-              >
-                <PiListMagnifyingGlass size={20} />
-                <span className="hidden lg:flex text-sm">جستجو پیشرفته</span>
+
+          {
+            isBackendGlobalSearch
+              ?
+              (
+                isLiveGlobalSearch
+                  ?
+                  <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[200px] lg:w-[300px] bg-[#f5f8fa] dark:bg-black">
+                    <HiMagnifyingGlass className="text-gray-300" size={20} />
+                    <input
+                      type="text"
+                      placeholder="جستجو ..."
+                      className="focus:!border-none focus:!outline-none px-2 w-[140px] md:w-[190px] lg:w-[290px]"
+                      value={globalBackendSearch || ""}
+                      onChange={(e) => setGlobalBackendSearch(e.target.value)}
+                    />
+                  </div>
+                  :
+                  <div className="flex gap-2 ">
+                    <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[200px] lg:w-[300px] bg-[#f5f8fa] dark:bg-black">
+                      <HiMagnifyingGlass className="text-gray-300" size={20} />
+                      <input
+                        type="text"
+                        placeholder="جستجو خود را وارد کنید ..."
+                        className="focus:!border-none focus:!outline-none px-2 w-[140px] md:w-[190px] lg:w-[290px]"
+                        value={tempGlobalFilter || ""}
+                        onChange={(e) => setTempGlobalFilter(e.target.value)}
+                      />
+                    </div>
+                    <button
+                      className="border border-solid border-gray-200 px-3 rounded-lg"
+                      onClick={() => { setGlobalBackendSearch(tempGlobalFilter) }}
+                    >
+                      جستجو
+                    </button>
+                  </div>
+              )
+              :
+              <div className="flex items-center border border-solid border-gray-200 p-1 rounded-lg w-[150px] md:w-[200px] lg:w-[300px] bg-[#f5f8fa] dark:bg-black">
+                <HiMagnifyingGlass className="text-gray-300" size={20} />
+                <input
+                  type="text"
+                  placeholder="جستجو ..."
+                  className="focus:!border-none focus:!outline-none px-2 w-[140px] md:w-[190px] lg:w-[290px]"
+                  value={globalFilter || ""}
+                  onChange={(e) => setGlobalFilter(e.target.value)}
+                />
               </div>
-            )}
+          }
+          <div className="flex gap-2 justify-center items-center">
             <div
               onClick={() => {
                 setFontSizeIsActive(!fontSizeIsActive);
@@ -473,23 +495,35 @@ export default function Table({
             )
           )}
         </div>
-      </div>
+      </div >
       <div className="w-full bg-white dark:bg-black shadow-al rounded-xl flex justify-center md:justify-between p-1  my-2  px-5">
+
         <div className="hidden md:flex gap-2 items-center justify-center">
-          <span className="flex items-center gap-1 text-sm">
-            برو به صفحه:
-            <input
-              min={1}
-              max={table.getPageCount().toLocaleString()}
-              type="number"
-              defaultValue={table.getState().pagination.pageIndex + 1}
-              onChange={(e) => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                table.setPageIndex(page);
-              }}
-              className="rounded-lg border border-solid border-gray-200 p-1 w-[45px]"
-            />
-          </span>
+          {
+            isSelective
+            &&
+            <>
+              <IndeterminateCheckbox
+                {...{
+                  checked: table.getIsAllPageRowsSelected(),
+                  indeterminate: table.getIsSomePageRowsSelected(),
+                  onChange: table.getToggleAllPageRowsSelectedHandler(),
+                }}
+              />
+              <div className="text-sm">
+                تعداد موارد انتخابی: ‌
+                {Object.keys(rowSelection).length} از{' '}
+                {table.getFilteredRowModel().rows.length}
+              </div>
+              |
+            </>
+          }
+          <div className="text-sm">
+            تعداد کل موارد: ‌
+            {table.getFilteredRowModel().rows.length}
+          </div>
+          {/* <td colSpan={20}>Page Rows ({table.getRowModel().rows.length})</td> */}
+
         </div>
         <div className="flex gap-1 items-center justify-center">
           <button
@@ -531,6 +565,21 @@ export default function Table({
           </button>
         </div>
         <div className="hidden md:flex gap-2 items-center justify-center">
+          <span className="flex items-center gap-1 text-sm">
+            برو به صفحه:
+            <input
+              min={1}
+              max={table.getPageCount().toLocaleString()}
+              type="number"
+              defaultValue={table.getState().pagination.pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                table.setPageIndex(page);
+              }}
+              className="rounded-lg text-base py-[2px] px-[6px] border border-solid border-gray-200 p-1 w-[40px] !bg-white dark:!bg-black"
+            />
+          </span>
+          <span className="text-sm">تعداد رکورد در صفحه</span>
           <select
             className="bg-white dark:bg-black rounded-lg border border-solid border-gray-200"
             value={table.getState().pagination.pageSize}
@@ -544,7 +593,6 @@ export default function Table({
               </option>
             ))}
           </select>
-          <span className="text-sm">رکورد در صفحه</span>
         </div>
 
       </div>
