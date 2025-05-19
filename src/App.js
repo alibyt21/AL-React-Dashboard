@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 import { routes } from "./routes";
-import userPermissionContext from "src/context/userPermissionContext";
+import userContext from "src/context/userContext";
 import { useEffect, useState } from "react";
 
 const router = createBrowserRouter(routes, {
@@ -9,21 +9,24 @@ const router = createBrowserRouter(routes, {
 });
 
 function App() {
-  const [userPermissions, setUserPermissions] = useState([]);
+  const [user, setUser] = useState({
+    role: {
+      role: "superAdmin",
+      permissions: ["SUPER_USER_PERMISSIONS"]
+    }
+  });
 
   // GET PERMISSIONS ARRAY FROM BACKEND - HARDCODED
-  const getUserPermissions = () => {
-    setUserPermissions(["VIEW_PROFILE"])
-  }
+  const getUserPermissions = () => { }
   useEffect(() => {
-    getUserPermissions();
+    // getUserPermissions();
   }, [])
 
 
   return (
-    <userPermissionContext.Provider value={userPermissions}>
+    <userContext.Provider value={{ user, setUser }}>
       <RouterProvider router={router} />
-    </userPermissionContext.Provider>
+    </userContext.Provider>
   );
 }
 

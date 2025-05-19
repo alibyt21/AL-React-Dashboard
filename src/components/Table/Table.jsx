@@ -6,6 +6,9 @@ import { LuArrowDownUp } from "react-icons/lu";
 import { PiRows } from "react-icons/pi";
 import { PiFunnelSimple } from "react-icons/pi";
 import { AiOutlineFontSize } from "react-icons/ai";
+import { PiMicrosoftExcelLogo } from "react-icons/pi";
+import { mkConfig, generateCsv, download } from 'export-to-csv'
+
 
 import {
   createColumnHelper,
@@ -19,31 +22,92 @@ import {
 
 import { rankItem } from "@tanstack/match-sorter-utils";
 
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import Spinner from "../Spinner";
+import PermissionBasedComponent from "../PermissionBasedComponent";
+import HasPermission from "../PermissionBasedComponent/HasPermission";
+import { get } from "src/services/HttpClient";
+
+var moment = require("jalali-moment");
 
 const columnHelper = createColumnHelper();
 
 export default function Table({
   data,
   columns,
-  globalBackendSearch = null,
+  requestPath = false,
+  // for getting requestData outer of table component
+  setRequestData = () => { },
   isSelective = false,
   setSelected = () => { },
   isLiveGlobalSearch = false,
-  setGlobalBackendSearch = () => { },
-  isBackendGlobalSearch = false,
+  CSVExportPermission = false,
+  tableName = ""
 }) {
-
 
   const [columnHidingIsActive, setColumnHidingIsActive] = useState(false);
   const [fontSizeIsActive, setFontSizeIsActive] = useState(false)
   const [tableFontSize, setTableFontSize] = useState(12);
   const [rowSelection, setRowSelection] = useState({});
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [tempGlobalFilter, setTempGlobalFilter] = useState(globalBackendSearch)
+  const [globalFrontFilter, setGlobalFrontFilter] = useState("");
+  const [globalBackendFilter, setGlobalBackendFilter] = useState(null);
+  const [tempGlobalBackendFilter, setTempGlobalBackendFilter] = useState(globalBackendFilter)
   const [padding, setPadding] = useState(4);
   const [isFiltersActive, setIsFiltersActive] = useState(false);
+
+
+  // server side management
+  const [serverResponse, setServerResponse] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [loading, setLoading] = useState(!serverResponse?.body && !data);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [backendFilters, setBackendFilters] = useState([])
+
+
+
+
+
+  useEffect(() => {
+    const getTableData = async () => {
+      setLoading(true);
+      setServerResponse(null);
+
+      if (totalItems !== 0) {
+        setTotalPages(Math.ceil(totalItems / perPage));
+      }
+
+      const result = await get(requestPath, {
+        params: {
+          page: currentPage,
+          perPage,
+          search: globalBackendFilter ? globalBackendFilter : null
+        }
+      });
+
+      if (result?.success) {
+        setServerResponse(result);
+        setRequestData(result?.body)
+        if (totalItems === 0 || totalItems !== result.totalItems) {
+          setTotalItems(result.totalItems);
+          setTotalPages(Math.ceil(result.totalItems / perPage));
+        }
+      }
+
+      setLoading(false);
+    }
+
+    if (requestPath) {
+      getTableData();
+    }
+  }, [requestPath, currentPage, perPage, globalBackendFilter])
+  // end server side management
+
+
+
+
+
 
   // this means data hasn't been loaded yet
   if (!Array.isArray(data)) {
@@ -53,7 +117,7 @@ export default function Table({
   // init columns
   let tableColumns = [];
   if (!columns) {
-    data.map((object) => {
+    data?.map((object) => {
       Object.keys(object).forEach((key) => {
         if (!tableColumns.includes(key)) {
           tableColumns.push(key);
@@ -69,7 +133,11 @@ export default function Table({
     });
   } else {
     tableColumns = columns.map((column) => {
-      return columnHelper.accessor(column.id, column);
+      if (!column.permission || HasPermission(column.permission)) {
+        return columnHelper.accessor(column.id, column);
+      } else {
+        return false
+      }
     });
   }
 
@@ -116,8 +184,6 @@ export default function Table({
     return itemRank.passed;
   };
 
-  const rerender = useReducer(() => ({}), {})[1];
-
 
   const handlePadding = () => {
     if (padding >= 6) {
@@ -128,17 +194,21 @@ export default function Table({
   };
 
   const table = useReactTable({
-    data: data,
-    columns: tableColumns,
+    data: serverResponse?.body ? serverResponse?.body : data,
+    columns: tableColumns.filter(function (column) {
+      if (column.inTable !== false) {
+        return column
+      }
+    }),
     filterFns: {
       fuzzy: fuzzyFilter,
     },
     state: {
-      globalFilter,
+      globalFilter: globalFrontFilter,
       rowSelection,
     },
     onRowSelectionChange: setRowSelection,
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: setGlobalFrontFilter,
     globalFilterFn: fuzzyFilter,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
@@ -151,8 +221,136 @@ export default function Table({
   }, [rowSelection])
 
 
+
+
+  // START generating CSV base on filtered rows
+  const csvConfig = mkConfig({
+    fieldSeparator: ',',
+    filename: `Export ${tableName} - ${moment().locale("fa")
+      .format("jYYYY-jMM-jDD HH-mm")}`, // export file name (without .csv)
+    decimalSeparator: '.',
+    useKeysAsHeaders: true,
+  })
+
+  // export function
+  const exportExcel = (rows) => {
+    const rowData = rows.map((row) => {
+      return tableColumns.reduce((acc, item) => {
+        if (item.inExport !== false) {
+          acc[item.header] = typeof (row.original[item.accessorKey]) == "object" ? JSON.stringify(row.original[item.accessorKey]) : row.original[item.accessorKey];
+        }
+        return acc;
+      }, {})
+    })
+    const csv = generateCsv(csvConfig)(rowData)
+    download(csvConfig)(csv)
+  }
+  // END generating CSV base on filtered rows
+
+
+  const Filter = useCallback(({ column, table }) => {
+    const firstValue = table
+      .getPreFilteredRowModel()
+      .flatRows[0]?.getValue(column.id);
+
+    const columnFilterValue = column.getFilterValue();
+
+    switch (typeof firstValue) {
+      case "number":
+        return (
+          <div>
+            <div className="flex gap-3">
+              <DebouncedInput
+                type="number"
+                min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+                max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+                value={columnFilterValue?.[0] ?? ""}
+                onChange={(value) =>
+                  column.setFilterValue((old) => [value, old?.[1]])
+                }
+                placeholder={`حداقل ${column.getFacetedMinMaxValues()?.[0]
+                  ? `(${column.getFacetedMinMaxValues()?.[0]})`
+                  : ""
+                  }`}
+                className="w-full border-b border-solid border-gray-200 focus:border-gray-400 py-2"
+              />
+              <DebouncedInput
+                type="number"
+                min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+                max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+                value={columnFilterValue?.[1] ?? ""}
+                onChange={(value) =>
+                  column.setFilterValue((old) => [old?.[0], value])
+                }
+                placeholder={`حداکثر ${column.getFacetedMinMaxValues()?.[1]
+                  ? `(${column.getFacetedMinMaxValues()?.[1]})`
+                  : ""
+                  }`}
+                className="w-full border-b border-solid border-gray-200 focus:border-gray-400 py-2"
+              />
+            </div>
+            <div className="h-1" />
+          </div>
+        )
+      case "string":
+        return (
+          <DebouncedInput
+            type="text"
+            value={columnFilterValue ?? ""}
+            onChange={(value) => {
+              if (!requestPath) {
+                column.setFilterValue(value)
+              } else {
+                addOrUpdateBackendFilters(column.id, value)
+                const params = backendFilters.reduce((acc, { key, value }) => {
+                  if (value !== '') {
+                    acc[key] = value;
+                  }
+                  return acc;
+                }, {});
+                params.currentPage = currentPage;
+                params.perPage = perPage;
+                if (globalBackendFilter) {
+                  params.globalBackendFilter = globalBackendFilter
+                }
+              }
+            }}
+            placeholder={`فیلتر با ...`}
+            className="w-full border-b border-solid border-gray-200 focus:border-gray-400 py-2"
+            list={column.id + "list"}
+          />
+        )
+    }
+  }, [])
+
+
+  function addOrUpdateBackendFilters(key, value) {
+    let temp = backendFilters;
+    // check if key is exist or not
+    let index = temp.map(filter => filter.key).indexOf(key)
+    if (index >= 0) {
+      // update
+      temp[index] = {
+        key,
+        value
+      };
+    } else {
+      // add
+      temp.push({
+        key,
+        value
+      })
+    }
+    // console.log("backendFilters",backendFilters);
+
+    setBackendFilters(temp)
+  }
+
+
+
   return (
     <>
+
       <div className="relative">
         <div
           className="w-full h-full fixed top-0 left-0 opacity-0 z-[2]"
@@ -232,7 +430,7 @@ export default function Table({
                 value="8"
                 onChange={() => setTableFontSize(8)}
               />
-              <label for="8">
+              <label htmlFor="8">
                 8
               </label>
             </div>
@@ -240,7 +438,7 @@ export default function Table({
               <input type="radio" id="10" name="font-size" value="10"
                 onChange={() => setTableFontSize(10)}
               />
-              <label for="10">
+              <label htmlFor="10">
                 10
               </label>
             </div>
@@ -248,7 +446,7 @@ export default function Table({
               <input type="radio" id="12" name="font-size" value="12"
                 onChange={() => setTableFontSize(12)}
               />
-              <label for="12">
+              <label htmlFor="12">
                 12
               </label>
             </div>
@@ -256,7 +454,7 @@ export default function Table({
               <input type="radio" id="14" name="font-size" value="14"
                 onChange={() => setTableFontSize(14)}
               />
-              <label for="14">
+              <label htmlFor="14">
                 14
               </label>
             </div>
@@ -264,7 +462,7 @@ export default function Table({
               <input type="radio" id="16" name="font-size" value="16"
                 onChange={() => setTableFontSize(16)}
               />
-              <label for="16">
+              <label htmlFor="16">
                 16
               </label>
             </div>
@@ -272,17 +470,17 @@ export default function Table({
               <input type="radio" id="18" name="font-size" value="18"
                 onChange={() => setTableFontSize(18)}
               />
-              <label for="18">
+              <label htmlFor="18">
                 18
               </label>
             </div>
           </div>
 
         </div>
-        <div className="select-none w-full flex flex-wrap gap-2 items-center justify-between bg-white dark:bg-black shadow-al rounded-xl my-2 p-2 px-3">
+        <div className="select-none w-full flex flex-wrap gap-2 items-center justify-between bg-white dark:bg-black shadow-al rounded-xl mb-2 p-2 px-3">
 
           {
-            isBackendGlobalSearch
+            requestPath
               ?
               (
                 isLiveGlobalSearch
@@ -293,8 +491,8 @@ export default function Table({
                       type="text"
                       placeholder="جستجو ..."
                       className="focus:!border-none focus:!outline-none px-2 w-[140px] md:w-[190px] lg:w-[290px]"
-                      value={globalBackendSearch || ""}
-                      onChange={(e) => setGlobalBackendSearch(e.target.value)}
+                      value={globalBackendFilter || ""}
+                      onChange={(e) => setGlobalBackendFilter(e.target.value)}
                     />
                   </div>
                   :
@@ -305,13 +503,13 @@ export default function Table({
                         type="text"
                         placeholder="جستجو خود را وارد کنید ..."
                         className="focus:!border-none focus:!outline-none px-2 w-[140px] md:w-[190px] lg:w-[290px]"
-                        value={tempGlobalFilter || ""}
-                        onChange={(e) => setTempGlobalFilter(e.target.value)}
+                        value={tempGlobalBackendFilter || ""}
+                        onChange={(e) => setTempGlobalBackendFilter(e.target.value)}
                       />
                     </div>
                     <button
                       className="border border-solid border-gray-200 px-3 rounded-lg"
-                      onClick={() => { setGlobalBackendSearch(tempGlobalFilter) }}
+                      onClick={() => { setGlobalBackendFilter(tempGlobalBackendFilter) }}
                     >
                       جستجو
                     </button>
@@ -324,17 +522,28 @@ export default function Table({
                   type="text"
                   placeholder="جستجو ..."
                   className="focus:!border-none focus:!outline-none px-2 w-[140px] md:w-[190px] lg:w-[290px]"
-                  value={globalFilter || ""}
-                  onChange={(e) => setGlobalFilter(e.target.value)}
+                  value={globalFrontFilter || ""}
+                  onChange={(e) => setGlobalFrontFilter(e.target.value)}
                 />
               </div>
           }
           <div className="flex gap-2 justify-center items-center">
+            <PermissionBasedComponent permission={CSVExportPermission}>
+              <div
+                onClick={() => {
+                  exportExcel(table.getFilteredRowModel().rows)
+                }}
+                className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
+              >
+                <PiMicrosoftExcelLogo size={20} />
+                <span className="hidden lg:flex text-sm">خروجی CSV</span>
+              </div>
+            </PermissionBasedComponent>
             <div
               onClick={() => {
                 setFontSizeIsActive(!fontSizeIsActive);
               }}
-              className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
+              className="hidden md:flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
             >
               <AiOutlineFontSize size={20} />
               <span className="hidden lg:flex text-sm">اندازه فونت</span>
@@ -361,14 +570,14 @@ export default function Table({
               onClick={() => {
                 handlePadding();
               }}
-              className="flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
+              className="hidden md:flex gap-1 border border-gray-100 border-solid cursor-pointer transition-all ease-in-out duration-300 hover:bg-gray-100 p-2 rounded-xl"
             >
               <PiRows size={20} />
               <span className="hidden lg:flex text-sm">فاصله ردیف‌ها</span>
             </div>
           </div>
         </div>
-        <div className="overflow-x-auto rounded-xl">
+        <div className="overflow-x-auto rounded-xl max-h-[700px]">
           <table className="table w-full bg-white dark:bg-black shadow-al rounded-xl overflow-x-auto">
             <tbody
               className="tbody w-full bg-white dark:bg-black rounded-b-xl"
@@ -378,7 +587,7 @@ export default function Table({
 
                 <tr
                   key={headerGroup.id}
-                  className="tr border-b border-solid border-gray-300 w-full"
+                  className="tr border-b border-solid border-gray-300 w-full sticky top-0 bg-white dark:bg-black shadow-al z-[1]"
                 >
 
                   {headerGroup.headers.map((header) => (
@@ -434,9 +643,19 @@ export default function Table({
                                 : "invisible h-0 opacity-0"
                                 } transition-all ease-in-out duration-300`}
                             >
-                              <Filter column={header.column} table={table} />
+                              {header.column.columnDef?.meta?.filterComponent &&
+                                header.column.columnDef?.meta?.filterComponent(
+                                  header.column.setFilterValue, header.column, table, backendFilters, setBackendFilters
+                                ) ? (
+                                header.column.columnDef?.meta?.filterComponent(
+                                  header.column.setFilterValue, header.column, table, backendFilters, setBackendFilters
+                                )
+                              ) : (
+                                <Filter column={header.column} table={table} />
+                              )}
                             </div>
                           ) : null}
+
                         </>
                       )}
                     </th>
@@ -483,7 +702,7 @@ export default function Table({
                         ))}
                     </div> */}
           </table>
-          {!Array.isArray(data) ? (
+          {!data && loading ? (
             <div className="flex w-full bg-white dark:bg-black">
               <Spinner text="در حال بارگیری ..." />
             </div>
@@ -520,23 +739,35 @@ export default function Table({
           }
           <div className="text-sm">
             تعداد کل موارد: ‌
-            {table.getFilteredRowModel().rows.length}
+            {!requestPath ? table.getFilteredRowModel().rows.length : totalItems}
           </div>
           {/* <td colSpan={20}>Page Rows ({table.getRowModel().rows.length})</td> */}
 
         </div>
         <div className="flex gap-1 items-center justify-center">
           <button
-            className={`${table.getCanPreviousPage() ? "opacity-100" : "opacity-20"
+            className={`${requestPath ? currentPage > 1 ? "opacity-100" : "opacity-20" : table.getCanPreviousPage() ? "opacity-100" : "opacity-20"
               } cursor-pointer transition-all ease-in-out duration-300 w-[40px] py-2 rounded-xl hover:bg-gray-100`}
-            onClick={() => table.firstPage()}
+            onClick={() => {
+              if (requestPath && currentPage > 1) {
+                setCurrentPage(1);
+              } else {
+                table.firstPage();
+              }
+            }}
           >
             {"<<"}
           </button>
           <button
-            className={`${table.getCanPreviousPage() ? "opacity-100" : "opacity-20"
+            className={`${requestPath ? currentPage > 1 ? "opacity-100" : "opacity-20" : table.getCanPreviousPage() ? "opacity-100" : "opacity-20"
               } cursor-pointer transition-all ease-in-out duration-300 w-[40px] py-2 rounded-xl hover:bg-gray-100`}
-            onClick={() => table.previousPage()}
+            onClick={() => {
+              if (requestPath && currentPage > 1) {
+                setCurrentPage(currentPage - 1);
+              } else {
+                table.previousPage();
+              }
+            }}
           >
             {"<"}
           </button>
@@ -544,22 +775,34 @@ export default function Table({
             <span className="flex items-center gap-1 text-sm">
               <div>صفحه</div>
               <span>
-                {table.getState().pagination.pageIndex + 1} از{" "}
-                {table.getPageCount().toLocaleString()}
+                {!requestPath ? table.getState().pagination.pageIndex + 1 : currentPage} از{" "}
+                {!requestPath ? table.getPageCount().toLocaleString() : totalPages}
               </span>
             </span>
           </div>
           <button
-            className={`${table.getCanNextPage() ? "opacity-100" : "opacity-20"
+            className={`${requestPath ? currentPage < totalPages ? "opacity-100" : "opacity-20" : table.getCanNextPage() ? "opacity-100" : "opacity-20"
               } cursor-pointer transition-all ease-in-out duration-300 w-[40px] py-2 rounded-xl hover:bg-gray-100`}
-            onClick={() => table.nextPage()}
+            onClick={() => {
+              if (requestPath && currentPage < totalPages) {
+                setCurrentPage(currentPage + 1);
+              } else {
+                table.nextPage();
+              }
+            }}
           >
             {">"}
           </button>
           <button
-            className={`${table.getCanNextPage() ? "opacity-100" : "opacity-20"
+            className={`${requestPath ? currentPage < totalPages ? "opacity-100" : "opacity-20" : table.getCanNextPage() ? "opacity-100" : "opacity-20"
               } cursor-pointer transition-all ease-in-out duration-300 w-[40px] py-2 rounded-xl hover:bg-gray-100`}
-            onClick={() => table.lastPage()}
+            onClick={() => {
+              if (requestPath && currentPage < totalPages) {
+                setCurrentPage(totalPages);
+              } else {
+                table.lastPage();
+              }
+            }}
           >
             {">>"}
           </button>
@@ -574,7 +817,11 @@ export default function Table({
               defaultValue={table.getState().pagination.pageIndex + 1}
               onChange={(e) => {
                 const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                table.setPageIndex(page);
+                if (requestPath) {
+                  setCurrentPage(page + 1);
+                } else {
+                  table.setPageIndex(page);
+                }
               }}
               className="rounded-lg text-base py-[2px] px-[6px] border border-solid border-gray-200 p-1 w-[40px] !bg-white dark:!bg-black"
             />
@@ -582,12 +829,13 @@ export default function Table({
           <span className="text-sm">تعداد رکورد در صفحه</span>
           <select
             className="bg-white dark:bg-black rounded-lg border border-solid border-gray-200"
-            value={table.getState().pagination.pageSize}
+            value={requestPath ? perPage : table.getState().pagination.pageSize}
             onChange={(e) => {
+              setPerPage(Number(e.target.value));
               table.setPageSize(Number(e.target.value));
             }}
           >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
+            {[10, 20, 30, 40, 50, 100].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 {pageSize}
               </option>
@@ -600,69 +848,7 @@ export default function Table({
   );
 }
 
-function Filter({ column, table }) {
-  const firstValue = table
-    .getPreFilteredRowModel()
-    .flatRows[0]?.getValue(column.id);
 
-  const columnFilterValue = column.getFilterValue();
-
-  const sortedUniqueValues = useMemo(
-    () =>
-      typeof firstValue === "number"
-        ? []
-        : Array.from(column.getFacetedUniqueValues().keys()).sort(),
-    [column.getFacetedUniqueValues()]
-  );
-
-  return typeof firstValue === "number" ? (
-    <div>
-      <div className="flex gap-3">
-        <DebouncedInput
-          type="number"
-          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
-          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
-          value={columnFilterValue?.[0] ?? ""}
-          onChange={(value) =>
-            column.setFilterValue((old) => [value, old?.[1]])
-          }
-          placeholder={`حداقل ${column.getFacetedMinMaxValues()?.[0]
-            ? `(${column.getFacetedMinMaxValues()?.[0]})`
-            : ""
-            }`}
-          className="w-full border-b border-solid border-gray-200 focus:border-gray-400 py-2"
-        />
-        <DebouncedInput
-          type="number"
-          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
-          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
-          value={columnFilterValue?.[1] ?? ""}
-          onChange={(value) =>
-            column.setFilterValue((old) => [old?.[0], value])
-          }
-          placeholder={`حداکثر ${column.getFacetedMinMaxValues()?.[1]
-            ? `(${column.getFacetedMinMaxValues()?.[1]})`
-            : ""
-            }`}
-          className="w-full border-b border-solid border-gray-200 focus:border-gray-400 py-2"
-        />
-      </div>
-      <div className="h-1" />
-    </div>
-  ) : (
-    <>
-      <DebouncedInput
-        type="text"
-        value={columnFilterValue ?? ""}
-        onChange={(value) => column.setFilterValue(value)}
-        placeholder={`فیلتر با ...`}
-        className="w-full border-b border-solid border-gray-200 focus:border-gray-400 py-2"
-        list={column.id + "list"}
-      />
-      <div className="h-1" />
-    </>
-  );
-}
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -691,7 +877,7 @@ function IndeterminateCheckbox({
 function DebouncedInput({
   value: initialValue,
   onChange,
-  debounce = 0,
+  debounce = 500,
   ...props
 }) {
   const [value, setValue] = useState(initialValue);
@@ -712,7 +898,27 @@ function DebouncedInput({
     <input
       {...props}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => {
+        setValue(e.target.value)
+      }}
     />
   );
+}
+
+function isDateString(str) {
+  // Check if the input is a string
+  if (typeof str !== 'string') return false;
+
+  // Try parsing the string with Date.parse (supports many formats)
+  const timestamp = Date.parse(str);
+
+  // Check if the parsing was successful and the result is a finite number
+  if (isNaN(timestamp)) {
+    // For some formats (like MM/DD/YYYY), Date.parse may fail in some browsers
+    // So we'll try an alternative approach with the Date constructor
+    const date = new Date(str);
+    return date.toString() !== 'Invalid Date' && !isNaN(date);
+  }
+
+  return true;
 }
