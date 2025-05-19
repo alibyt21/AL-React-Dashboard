@@ -1,23 +1,25 @@
 import { useContext } from "react";
-import userPermissionContext from "src/context/userPermissionContext";
 import { Navigate } from "react-router-dom";
+import userContext from "src/context/userContext";
 
 export default function PermissionBasedComponent({ permission, children, isFull = false }) {
-    let userPermissions = useContext(userPermissionContext)
+    let { user } = useContext(userContext)
+    
+    let userPermissions = user?.role?.permissions ? user?.role?.permissions : [];
     return (
         <>
-            {userPermissions.find((obj) => {
-                return obj === "SUPER_USER_PERMISSION";
+            {userPermissions && userPermissions.find((obj) => {
+                return obj === "SUPER_USER_PERMISSIONS" && permission !== "NOT_SUPER_USER_PERMISSIONS";
             }) ? (
                 children
-            ) : userPermissions.find((obj) => {
-                return obj === permission;
+            ) : userPermissions && userPermissions.find((obj) => {
+                return obj === permission || permission === undefined || (permission === "NOT_SUPER_USER_PERMISSIONS" && obj !== "SUPER_USER_PERMISSIONS");
             }) ? (
                 children
             ) : (
                 isFull
                     ?
-                    userPermissions.length
+                    userPermissions?.length
                         ?
                         <Navigate to="/user/denied" />
                         :
